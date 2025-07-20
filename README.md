@@ -14,8 +14,7 @@
 8. [Interpretability and Explainability](#8-interpretability-and-explainability)  
 9. [Deployment](#9-deployment)  
 10. [Challenges and Lessons Learned](#10-challenges-and-lessons-learned)  
-11. [Future Work and Acknowledgements](#11-future-work-and-acknowledgements)  
-12. [Conclusion](#12-conclusion)  
+
 
 ---
 
@@ -233,7 +232,7 @@ To explore non-linear relationships between numerical features and stroke risk, 
 
 Each variable was divided into 10 equal-width bins. For each bin, we calculated the percentage of patients who experienced a stroke. This allowed us to visualize how stroke risk varies across different ranges of these features.
 
-### 🔍 What the Plots Show
+### What the Plots Show
 
 ![Stroke Probability Trends](Images/stroke_probability.png)
 
@@ -252,7 +251,7 @@ Each variable was divided into 10 equal-width bins. For each bin, we calculated 
    - Particularly after age **60**, the risk increases steeply, supporting the common medical knowledge that stroke is more prevalent in older populations.
    - This feature shows the strongest monotonic relationship, making **age a critical component in any risk scoring model**.
 
-### 🧠 Why This Matters
+### Why This Matters
 
 Understanding how stroke probability changes across these features helps in:
 
