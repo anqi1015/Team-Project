@@ -223,7 +223,7 @@ The top 20 features ranked by their importance in the model are shown below:
 
 This analysis informed further feature engineering and model tuning efforts.
 
-## 📊 Stroke Probability by BMI, Glucose Level, and Age
+## Stroke Probability by BMI, Glucose Level, and Age
 
 To explore non-linear relationships between numerical features and stroke risk, we binned and plotted stroke probability across three key continuous variables:
 
