@@ -222,3 +222,41 @@ The top 20 features ranked by their importance in the model are shown below:
 - Interaction features and engineered polynomial terms, where included, also showed meaningful influence.
 
 This analysis informed further feature engineering and model tuning efforts.
+
+## 📊 Stroke Probability by BMI, Glucose Level, and Age
+
+To explore non-linear relationships between numerical features and stroke risk, we binned and plotted stroke probability across three key continuous variables:
+
+- **BMI (Body Mass Index)**
+- **Average Glucose Level**
+- **Age**
+
+Each variable was divided into 10 equal-width bins. For each bin, we calculated the percentage of patients who experienced a stroke. This allowed us to visualize how stroke risk varies across different ranges of these features.
+
+### 🔍 What the Plots Show
+
+![Stroke Probability Trends](Images/stroke_probability.png)
+
+1. **Stroke Probability vs BMI**  
+   - Stroke risk is relatively flat across normal to slightly overweight BMI ranges.
+   - There is a noticeable uptick in stroke probability in individuals with **very high BMI**, suggesting possible obesity-related cardiovascular risk.
+   - The relationship is not strictly linear—this justifies using **binning or polynomial transformations** rather than treating BMI as a purely linear feature.
+
+2. **Stroke Probability vs Average Glucose Level**  
+   - A clear positive relationship exists between glucose levels and stroke probability.
+   - Stroke risk remains low until around **150–180 mg/dL**, after which it **rises sharply**.
+   - This trend reflects the heightened stroke risk in patients with **diabetes or prediabetes**, confirming that glucose level is a key predictive feature.
+
+3. **Stroke Probability vs Age**  
+   - Stroke probability **increases exponentially with age**.
+   - Particularly after age **60**, the risk increases steeply, supporting the common medical knowledge that stroke is more prevalent in older populations.
+   - This feature shows the strongest monotonic relationship, making **age a critical component in any risk scoring model**.
+
+### 🧠 Why This Matters
+
+Understanding how stroke probability changes across these features helps in:
+
+- **Feature engineering**: We can use this information to transform variables (e.g., create bins or quadratic terms) that better capture non-linear risk patterns.
+- **Model interpretability**: These trends give clinicians and stakeholders a visual understanding of risk factors, even without black-box models.
+- **Threshold-based interventions**: Health policies or apps might set alerts when glucose levels exceed ~180 or BMI crosses 35, based on real observed risk jumps.
+
