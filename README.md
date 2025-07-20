@@ -205,4 +205,20 @@ This imbalance poses a risk that naive models may simply predict the majority cl
   - **Avg Glucose Level:** Grouped into normal (<140 mg/dL), prediabetic (140–199 mg/dL), and diabetic (≥200 mg/dL) ranges.
 - Binning helped simplify complex relationships and was useful for models that benefit from categorical inputs.
 
----
+
+## Feature Importance Analysis
+
+To better understand which features contribute most to predicting stroke, we trained a Random Forest classifier with class weighting to handle imbalance and extracted feature importances.
+
+The top 20 features ranked by their importance in the model are shown below:
+
+![Top 20 Feature Importances from Random Forest](images/rf_feature_importance.png)
+
+### Insights from Feature Importance
+
+- **Age** emerged as the most important predictor, consistent with medical knowledge that stroke risk increases with age.
+- **Average glucose level** was also highly predictive, reflecting the impact of blood sugar on stroke risk.
+- Medical history indicators such as **hypertension** and **heart disease** showed strong contributions.
+- Interaction features and engineered polynomial terms, where included, also showed meaningful influence.
+
+This analysis informed further feature engineering and model tuning efforts.
