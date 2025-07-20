@@ -156,7 +156,7 @@ This imbalance poses a risk that naive models may simply predict the majority cl
 
 ### 3.2 Univariate Analysis of Key Features
 
-![Alt text describing the graph](stroke_feature_comparison.png)
+![Features Graph](images/stroke_feature_comparison.png)
 
 #### Age
 
@@ -212,7 +212,7 @@ To better understand which features contribute most to predicting stroke, we tra
 
 The top 20 features ranked by their importance in the model are shown below:
 
-![Top 20 Feature Importances from Random Forest](images/rf_feature_importance.png)
+![Feature Importances from Random Forest](images/rf_feature_importance.png)
 
 ### Insights from Feature Importance
 
