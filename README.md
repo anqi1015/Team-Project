@@ -156,7 +156,7 @@ This imbalance poses a risk that naive models may simply predict the majority cl
 
 ### 3.2 Univariate Analysis of Key Features
 
-![Alt text describing the graph](path/to/your/image.png)
+![Alt text describing the graph](stroke_feature_comparison.png)
 
 #### Age
 
