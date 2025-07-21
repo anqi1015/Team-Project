@@ -103,7 +103,7 @@ The raw stroke prediction dataset contained several imperfections, including mis
 
 ### 2.2 Handling Missing Values
 
-#### 2.2.1 Missing BMI Values
+#### Missing BMI Values
 
 The **bmi** feature had missing values in approximately 5% of the records. Since BMI is an important indicator of health and stroke risk, it was necessary to impute these missing values rather than drop affected rows, which would reduce data size and potentially bias the dataset.
 
@@ -125,6 +125,68 @@ This method involved:
 
 ---
 
+### BMI Computation and Imputation Strategy
+
+#### Importance of BMI in Stroke Prediction
+
+Body Mass Index (BMI) is a crucial indicator of obesity, which is a known risk factor for stroke. However, in the stroke dataset, many BMI values are missing. Since accurate BMI data is essential for reliable risk modeling, we must estimate these missing values effectively.
+
+#### Why Impute Missing BMI Values?
+
+- **Data Completeness:** Missing BMI values reduce dataset usability and can bias model training.
+- **Preserve Statistical Relationships:** Proper imputation maintains underlying correlations between BMI and other clinical features.
+- **Improve Model Performance:** Accurate imputation enhances feature quality, leading to better predictive power for stroke risk.
+
+#### Correlation Analysis to Guide Imputation
+
+We examined correlations between BMI and two related features — Age and Average Glucose Level — to understand their predictive power for estimating BMI:
+
+| Correlation Metric           | Age vs BMI | Glucose vs BMI |
+|------------------------------|------------|----------------|
+| Original Data (with missing)  | 0.3334     | 0.1755         |
+| After Mean Imputation         | 0.3259     | 0.1688         |
+| After Median Imputation       | 0.3243     | 0.1669         |
+| After Polynomial Regression   | 0.3353     | 0.1836         |
+
+- The moderate positive correlation (~0.33) between Age and BMI suggests age is a meaningful predictor.
+- Glucose level has a weaker but still notable correlation (~0.17–0.18) with BMI.
+- Polynomial regression imputation preserves and slightly improves these correlations compared to simpler mean or median imputation.
+
+#### Imputation Methods Evaluated
+
+1. **Mean Imputation:** Replaces missing BMI values with the overall mean BMI of the dataset.
+2. **Median Imputation:** Uses the median BMI, which is more robust to outliers.
+3. **Polynomial Regression Imputation:** Predicts missing BMI values using a polynomial regression model trained on Age and Average Glucose Level, capturing nonlinear relationships.
+
+#### Evaluation Metrics
+
+We evaluated the imputation methods on two fronts:
+
+- **Predictive Performance of Stroke Models:** Measured by Area Under the ROC Curve (AUC) and F1 Score, reflecting the impact of imputation on downstream stroke prediction.
+- **Imputation Accuracy:** Measured by Mean Squared Error (MSE) on BMI values artificially masked (hidden) during testing, representing how close the imputed values are to the true BMI.
+
+| Imputation Method      | Stroke Prediction AUC | Stroke Prediction F1 Score | BMI Imputation MSE (masked data) |
+|------------------------|----------------------|----------------------------|----------------------------------|
+| Mean                   | 0.7932               | 0.0000                     | 73.0823                          |
+| Median                 | 0.7889               | 0.0000                     | 73.5383                          |
+| Polynomial Regression  | 0.7610               | 0.0250                     | 59.4719                          |
+
+#### Interpretation of Results
+
+- **Mean and Median Imputation:** Provide reasonable AUC scores but fail to improve F1 score, indicating poor identification of positive stroke cases. Both have high MSE, showing less accurate BMI estimates.
+- **Polynomial Regression Imputation:** Achieves the lowest MSE, indicating more accurate BMI estimations. Although the stroke prediction AUC is slightly lower, the small increase in F1 score suggests improved detection of stroke cases when using this imputation. The better estimation of BMI provides higher-quality input data, critical for complex models.
+
+#### Summary and Rationale
+
+- Correlations demonstrate that Age and Glucose level are useful predictors for BMI.
+- Polynomial regression leverages these correlations to better estimate missing BMI values by capturing nonlinear patterns.
+- This improved BMI imputation reduces error and enhances feature quality.
+- Consequently, models trained with regression-imputed BMI have more reliable data, supporting improved clinical risk assessment.
+- Despite a slight drop in AUC, the enhanced F1 score and BMI accuracy justify the use of polynomial regression over simpler imputations.
+
+#### Conclusion
+
+Accurate imputation of BMI is vital for stroke risk modeling. Our analysis shows that polynomial regression-based BMI imputation, grounded in meaningful correlations with Age and Glucose, offers a more precise and clinically relevant approach compared to mean or median imputation. This method improves data integrity, supporting better downstream predictive performance and more trustworthy risk stratification.
 ### 2.3 Outlier Detection and Column Removal
 
 Certain extreme values in **bmi** and **avg_glucose_level** were identified as outliers that could skew model training:
@@ -261,22 +323,6 @@ Understanding how stroke probability changes across these features helps in:
 - 
 
 
-## Clustering for Risk Segmentation in Stroke Prediction
-
-To enhance stroke prediction and uncover hidden risk groups, we applied **K-Means Clustering**—an unsupervised learning method that groups individuals based on health attributes.
-
----
-
-### Why Use Clustering?
-
-Clustering was used for the following reasons:
-
-- **Risk Stratification**: Identify subgroups with distinct stroke risk profiles.
-- **Feature Engineering**: Add `segment` as an informative feature for supervised models.
-- **Interpretability**: Understand which groups in the population are most vulnerable.
-- **Personalization**: Inform targeted interventions or screening based on segment characteristics.
-
-Rather than relying solely on individual variables like age or glucose, clustering captures **multidimensional health patterns** and creates **interpretable segments**.
 
 ---
 ## #4-feature-engineering
