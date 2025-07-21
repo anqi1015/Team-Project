@@ -258,4 +258,126 @@ Understanding how stroke probability changes across these features helps in:
 - **Feature engineering**: We can use this information to transform variables (e.g., create bins or quadratic terms) that better capture non-linear risk patterns.
 - **Model interpretability**: These trends give clinicians and stakeholders a visual understanding of risk factors, even without black-box models.
 - **Threshold-based interventions**: Health policies or apps might set alerts when glucose levels exceed ~180 or BMI crosses 35, based on real observed risk jumps.
+- 
+
+
+## Clustering for Risk Segmentation in Stroke Prediction
+
+To enhance stroke prediction and uncover hidden risk groups, we applied **K-Means Clustering**—an unsupervised learning method that groups individuals based on health attributes.
+
+---
+
+### Why Use Clustering?
+
+Clustering was used for the following reasons:
+
+- **Risk Stratification**: Identify subgroups with distinct stroke risk profiles.
+- **Feature Engineering**: Add `segment` as an informative feature for supervised models.
+- **Interpretability**: Understand which groups in the population are most vulnerable.
+- **Personalization**: Inform targeted interventions or screening based on segment characteristics.
+
+Rather than relying solely on individual variables like age or glucose, clustering captures **multidimensional health patterns** and creates **interpretable segments**.
+
+---
+## #4-feature-engineering
+
+
+## Automated Risk Score Summary
+
+The **Automated Risk Score** is designed to quantify an individual’s risk of stroke by combining multiple key risk factors. This score helps in stratifying patients based on their likelihood of experiencing a stroke, aiding clinicians in early detection and targeted interventions.
+
+---
+
+### Key Risk Factors and Their Impact on Stroke Risk
+
+The table below shows the main risk factors identified, the high-risk category for each, corresponding stroke rates for individuals in the high-risk group versus others, the calculated risk increase, and the relative weight assigned to each factor in the risk score calculation.
+
+| Risk Factor      | High-Risk Category Value | Stroke Rate (High Risk) | Stroke Rate (Others) | Risk Increase (Difference) | Relative Weight |
+|------------------|--------------------------|------------------------|---------------------|----------------------------|-----------------|
+| **Hypertension** | 1                        | 13.25%                 | 3.97%               | 9.28%                      | 0.72            |
+| **Heart Disease**| 1                        | 17.03%                 | 4.18%               | 12.85%                     | 1.00            |
+| **Ever Married** | Yes                      | 6.56%                  | 1.65%               | 4.91%                      | 0.38            |
+| **Gender**       | Male                     | 5.11%                  | 4.71%               | 0.40%                      | 0.03            |
+| **Work Type**    | Self-employed            | 7.94%                  | 4.29%               | 3.65%                      | 0.28            |
+| **Smoking Status**| Formerly Smoked          | 7.92%                  | 4.24%               | 3.68%                      | 0.29            |
+| **Residence Type**| Urban                    | 5.20%                  | 4.53%               | 0.67%                      | 0.05            |
+
+---
+
+### Explanation of Terms:
+
+- **Stroke Rate (High Risk):** The proportion of individuals in the dataset with the specified high-risk factor who experienced a stroke.
+- **Stroke Rate (Others):** The stroke rate among individuals without the high-risk factor.
+- **Risk Increase:** The absolute increase in stroke rate attributed to the presence of the high-risk factor (difference between high risk and others).
+- **Relative Weight:** A normalized value representing the importance of each risk factor when calculating the overall risk score. The highest risk factor (heart disease) is assigned a weight of 1, and others are scaled accordingly.
+
+---
+
+### How the Automated Risk Score is Calculated:
+
+1. **Identification of Risk Factors:** For each individual, presence or absence of the high-risk category for each factor is determined (e.g., hypertension = 1 means “has hypertension”).
+2. **Assigning Weights:** Each risk factor is assigned a weight proportional to its contribution to stroke risk based on the risk increase observed in the dataset.
+3. **Summation of Scores:** The individual's overall risk score is calculated by summing the weights of all risk factors present.
+4. **Risk Stratification:** Higher risk scores correspond to higher likelihood of stroke, enabling categorization into risk groups (e.g., low, moderate, high).
+
+---
+
+### Purpose and Benefits of the Automated Risk Score
+
+- **Simplifies Risk Assessment:** By consolidating multiple risk factors into a single numerical score, clinicians can quickly assess patient risk.
+- **Supports Early Intervention:** High-risk individuals can be identified for more frequent monitoring or preventive measures.
+- **Data-Driven:** The weights and risk increases are derived directly from empirical stroke data, ensuring relevance and accuracy.
+- **Facilitates Patient Communication:** The score can be used to explain stroke risk to patients in a straightforward manner.
+
+---
+
+This automated approach enhances stroke prediction models by integrating clinical and demographic risk factors into a cohesive scoring system, improving decision-making and patient outcomes.
+
+
+
+## Clustering for Risk Segmentation
+
+
+To improve stroke prediction and better understand risk profiles, we applied **K-Means Clustering** to segment the population into distinct health risk groups.
+
+
+- **Risk Stratification:** Group individuals by similar health and risk factors to identify high-risk segments.
+- **Feature Engineering:** Use cluster labels as features in predictive models.
+- **Interpretability:** Gain insights into characteristics of different risk groups.
+- **Personalization:** Enable targeted interventions based on risk segment.
+
+### Methodology
+
+- **Features Used:** Age, average glucose level, BMI, hypertension, and heart disease status.
+- **Preprocessing:** Missing BMI values were imputed using polynomial regression, and numeric features were standardized.
+- **Cluster Selection:** Tested cluster counts (k) from 2 to 10 using Silhouette scores.
+- **Optimal Number of Clusters:** 3 (silhouette score = 0.2254).
+
+### Cluster Summary
+
+| Cluster | Stroke Rate | Avg Risk Score | Age (years) | Avg Glucose | BMI   | Hypertension Rate | Heart Disease Rate | Risk Label      |
+|---------|-------------|----------------|-------------|-------------|-------|-------------------|--------------------|-----------------|
+| 0       | 5.09%       | 0.635          | 52.73       | 89.82       | 30.51 | 10.07%            | 4.92%              | Elevated Risk   |
+| 1       | 14.45%      | 0.966          | 62.47       | 203.13      | 33.81 | 30.09%            | 19.47%             | High Risk       |
+| 2       | 0.20%       | 0.066          | 16.50       | 94.12       | 23.74 | 0.07%             | 0.07%              | Low Risk        |
+
+### Interpretation
+
+- **High Risk (Cluster 1):** Older individuals with high glucose and BMI, and higher prevalence of hypertension and heart disease, showing the highest stroke rate.
+- **Elevated Risk (Cluster 0):** Middle-aged group with moderate glucose, BMI, and comorbidities, with moderate stroke risk.
+- **Low Risk (Cluster 2):** Younger, healthier individuals with very low stroke incidence.
+
+### Conclusion
+
+Clustering effectively identified meaningful subgroups within the population. Incorporating these risk segments enhances predictive modeling by providing additional context beyond individual features, improving both model interpretability and performance in stroke prediction.
+
+---
+
+### Visualizing Clusters with UMAP
+
+Below is a UMAP projection visualizing the clusters in 2D space, showing clear separation among risk groups:
+
+![UMAP Projection of Stroke Risk Clusters](Images/clustering.png)
+
+
 
