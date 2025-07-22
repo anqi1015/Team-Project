@@ -719,15 +719,15 @@ This project includes a user-friendly Streamlit web application for predicting s
 
 ### Lessons Learned
 
-- Robust data preprocessing pipelines are essential for handling mixed data types and ensuring reproducibility.
 
-- Effective handling of class imbalance (e.g., using SMOTE) improves minority class prediction performance.
+- **Data quality matters more than modeling:** Clean, accurate, and well-preprocessed data is essential for building reliable stroke prediction models.
 
-- Model explainability tools such as SHAP increase trust and transparency in predictions.
+- **Imbalanced classes are very challenging:** Predicting minority class (stroke) accurately remains difficult due to the imbalance in the dataset.
 
-- Enhancing user engagement through interactive and educational app features adds value beyond basic prediction.
+- **Unsupervised methods can help feature engineering:** Techniques like clustering or anomaly detection may provide useful new features for better predictions.
 
-- Iterative experimentation with preprocessing, modeling, and evaluation parameters leads to better outcomes.
+- **More features are needed for accurate stroke prediction:** Stroke risk depends on many factors; limited features restrict model performance.
 
-- Streamlit is a powerful tool for quickly deploying interactive machine learning applications with a clean user interface.
+- **Balancing recall and precision is difficult:** Achieving both high recall and precision for stroke prediction is challenging.
 
+- **Neural networks offer a good balance:** Deep learning models can provide better trade-offs between recall and precision compared to simpler models.
