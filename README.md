@@ -20,7 +20,7 @@
 
 ## 1. Introduction & Dataset Overview
 
-### 1.1 Background and Motivation
+### Background and Motivation
 
 Stroke remains one of the foremost causes of death and long-term disability worldwide. It occurs when the blood supply to the brain is interrupted or reduced, leading to brain cell death due to lack of oxygen and nutrients. According to the World Health Organization, approximately 15 million people suffer a stroke each year, with nearly 5 million deaths and 5 million survivors experiencing permanent disabilities.
 
@@ -28,7 +28,7 @@ This project explores the application of ML techniques to predict stroke occurre
 
 ---
 
-### 1.2 Dataset Description
+### Dataset Description
 
 The dataset used in this study is publicly available on Kaggle and contains records for 5,110 patients, each described by 12 features, including the binary target variable indicating whether the patient had a stroke.
 
@@ -51,33 +51,33 @@ The features are summarized below:
 
 ---
 
-### 1.3 Initial Observations and Challenges
+### Initial Observations and Challenges
 
 The dataset presents several important characteristics and challenges that shaped the modeling approach:
 
-#### 1.3.1 Imbalanced Target Classes
+#### Imbalanced Target Classes
 
 - Stroke cases represent approximately 4.9% (249 out of 5,110) of the dataset, making the classification task highly imbalanced. This imbalance could cause models to be biased towards predicting the majority “no stroke” class if unaddressed.
 
-#### 1.3.2 Missing Values
+#### Missing Values
 
 - The **bmi** feature contains missing values for about 4% of the records (201 out of 5,110). Since BMI is a crucial health indicator associated with stroke risk, effective imputation methods are necessary to avoid bias and loss of data.
 
-#### 1.3.3 Categorical Variables
+#### Categorical Variables
 
 - Several features such as gender, work_type, smoking_status, and residence_type are categorical and require encoding into numerical representations that machine learning algorithms can process.
 
-#### 1.3.4 Outliers and Noisy Data
+#### Outliers and Noisy Data
 
 - Certain observations show extreme or inconsistent values, particularly in BMI and glucose levels. These outliers need to be carefully handled during preprocessing to prevent distortion of model learning.
 
-#### 1.3.5 Moderate Dataset Size
+#### Moderate Dataset Size
 
 - With just over 5,000 samples, the dataset is sufficient to train classical machine learning models and small neural networks but not large-scale deep learning models.
 
 ---
 
-### 1.4 Project Objectives
+### Project Objectives
 
 Given these characteristics, the project is designed to accomplish the following:
 
@@ -93,7 +93,7 @@ Given these characteristics, the project is designed to accomplish the following
 
 ## 2. Data Cleaning and Preprocessing
 
-### 2.1 Introduction
+### Introduction
 
 Data preprocessing is a critical step in any machine learning project. The quality and format of the input data greatly influence the performance and reliability of predictive models. In this project, preprocessing involved handling missing data, addressing outliers, encoding categorical variables, and scaling numerical features.
 
@@ -101,7 +101,7 @@ The raw stroke prediction dataset contained several imperfections, including mis
 
 ---
 
-### 2.2 Handling Missing Values
+### Handling Missing Values
 
 #### Missing BMI Values
 
@@ -113,7 +113,7 @@ Several imputation techniques were evaluated:
 - **Median Imputation:** Using the median BMI, less sensitive to outliers.
 - **Regression Imputation:** Predicting missing BMI using other related features (such as age and average glucose) through linear or polynomial regression.
 
-##### Regression-Based Imputation
+#### Regression-Based Imputation
 
 Regression imputation was found to be more effective in preserving the relationship between BMI and other features. A quadratic regression model using age and average glucose level predicted missing BMI values, accounting for nonlinear associations observed during exploratory data analysis.
 
@@ -125,7 +125,7 @@ This method involved:
 
 ---
 
-### BMI Computation and Imputation Strategy
+#### BMI Computation and Imputation Strategy
 
 #### Importance of BMI in Stroke Prediction
 
@@ -187,14 +187,16 @@ We evaluated the imputation methods on two fronts:
 #### Conclusion
 
 Accurate imputation of BMI is vital for stroke risk modeling. Our analysis shows that polynomial regression-based BMI imputation, grounded in meaningful correlations with Age and Glucose, offers a more precise and clinically relevant approach compared to mean or median imputation. This method improves data integrity, supporting better downstream predictive performance and more trustworthy risk stratification.
-### 2.3 Outlier Detection and Column Removal
+
+
+### Outlier Detection and Column Removal
 
 Certain extreme values in **bmi** and **avg_glucose_level** were identified as outliers that could skew model training:
 
-- BMI values greater than 70 were considered implausible for the population and likely data entry errors. These rows were removed.
-- Glucose levels above 300 mg/dL, which are physiologically extreme, were examined and handled case-by-case, with some removed and others capped at reasonable upper limits.
+- BMI values greater than 70 were considered implausible for the population.
+- Glucose levels above 270 mg/dL, which are physiologically extreme, were examined.
 - The `gender` column contained a small number of records labeled as `"Other"`. Due to their scarcity and unclear definition, these records were removed.
-- The `work_type` category `"Never_worked"` had very few samples and was also removed to avoid noise.
+- - The `work_type` category **'Children'** applies to individuals under 18 years old. For modeling consistency, all `'Children'` entries were grouped under the category **"Never_worked"**. This consolidation simplifies the work type variable and aligns with logical age restrictions.
 - The `id` column was dropped as it does not contribute to prediction.
 ---
 
@@ -204,7 +206,7 @@ Certain extreme values in **bmi** and **avg_glucose_level** were identified as o
 
 Exploratory Data Analysis (EDA) is a fundamental step to understand the characteristics of the dataset and to identify relationships between variables that will inform feature engineering and model development.
 
-### 3.1 Target Variable Distribution and Class Imbalance
+### Target Variable Distribution and Class Imbalance
 
 The dataset exhibits a strong class imbalance:
 
@@ -215,7 +217,7 @@ The dataset exhibits a strong class imbalance:
 
 This imbalance poses a risk that naive models may simply predict the majority class, leading to misleadingly high accuracy but poor recall for stroke cases. Therefore, metrics like F1-score, precision, and recall must be emphasized in model evaluation.
 
-### 3.2 Univariate Analysis of Key Features
+### Analysis of Key Features
 
 ![Features Graph](Images/stroke_feature_comparison.png)
 
@@ -237,7 +239,7 @@ This imbalance poses a risk that naive models may simply predict the majority cl
 - The relationship with stroke is non-linear and somewhat inconsistent, with stroke risk fluctuating across BMI ranges.
 - Outliers with extremely high BMI were removed prior to analysis.
 
-### 3.3 Categorical Variable Analysis
+### Categorical Variable Analysis
 
 - **Gender:** After excluding rare 'Other' category, stroke prevalence was similar across male and female patients.
 - **Hypertension:** Strong positive association with stroke; hypertensive patients had significantly higher stroke incidence.
@@ -245,21 +247,21 @@ This imbalance poses a risk that naive models may simply predict the majority cl
 - **Smoking Status:** Current and former smokers had higher stroke rates compared to never smokers.
 - **Work Type and Residence Type:** No substantial difference in stroke prevalence detected.
 
-### 3.4 Bivariate and Interaction Analysis
+### Feature Interaction Analysis
 
 - Investigated interactions between features, particularly between continuous variables.
 - The product term `age * bmi` showed a moderate correlation with stroke, indicating that the combined effect of aging and BMI might be relevant.
 - Polynomial terms such as `age²` and `glucose²` captured observed non-linear effects.
 - Visualizations such as scatter plots and boxplots were used to inspect these interactions.
 
-### 3.5 Correlation Matrix
+### Correlation Matrix
 
 - Calculated Pearson correlation coefficients for numerical features and the target.
 - `age` and `avg_glucose_level` showed positive correlations with stroke.
 - `bmi` showed a weak positive correlation.
 - Checked feature-to-feature correlations to detect multicollinearity risks.
 
-### 3.6 Feature Binning
+### Feature Binning
 
 - Created bins for continuous variables to discretize them into meaningful groups:
   - **Age:** Divided into <40 years, 40–60 years, and >60 years categories to align with clinical risk brackets.
@@ -320,17 +322,15 @@ Understanding how stroke probability changes across these features helps in:
 - **Feature engineering**: We can use this information to transform variables (e.g., create bins or quadratic terms) that better capture non-linear risk patterns.
 - **Model interpretability**: These trends give clinicians and stakeholders a visual understanding of risk factors, even without black-box models.
 - **Threshold-based interventions**: Health policies or apps might set alerts when glucose levels exceed ~180 or BMI crosses 35, based on real observed risk jumps.
-- 
-
-
+  
 
 ---
 ## #4 feature engineering
 
 
-## Automated Risk Score Summary
+## Risk Score Summary
 
-The **Automated Risk Score** is designed to quantify an individual’s risk of stroke by combining multiple key risk factors. This score helps in stratifying patients based on their likelihood of experiencing a stroke, aiding clinicians in early detection and targeted interventions.
+The **Risk Score** is designed to quantify an individual’s risk of stroke by combining multiple key risk factors. This score helps in stratifying patients based on their likelihood of experiencing a stroke, aiding clinicians in early detection and targeted interventions.
 
 ---
 
@@ -368,7 +368,7 @@ The table below shows the main risk factors identified, the high-risk category f
 
 ---
 
-### Purpose and Benefits of the Automated Risk Score
+### Purpose and Benefits of the Risk Score
 
 - **Simplifies Risk Assessment:** By consolidating multiple risk factors into a single numerical score, clinicians can quickly assess patient risk.
 - **Supports Early Intervention:** High-risk individuals can be identified for more frequent monitoring or preventive measures.
@@ -457,15 +457,47 @@ We implemented an ensemble model combining four strong classifiers:
 
 ## 6. Handling Class Imbalance
 
-Stroke prediction presents a classic imbalanced classification problem, with the minority class (stroke cases) significantly underrepresented compared to the majority class (no stroke).
 
-To address this, we applied **SMOTE (Synthetic Minority Oversampling Technique)** within the training pipeline. SMOTE synthesizes new minority class examples by interpolating between existing ones, effectively balancing the dataset without simply duplicating samples.
+### Data-Level Techniques
 
-Importantly, SMOTE was applied **only on the training data** inside the pipeline to avoid data leakage and ensure unbiased evaluation.
+### Resampling Methods
+- **Random Oversampling:** Duplicate minority class samples to balance the dataset.  
+- **Random Undersampling:** Remove samples from the majority class to balance classes.  
+- **Synthetic Oversampling:** Generate new synthetic minority samples using:  
+  - SMOTE (Synthetic Minority Oversampling Technique)  
+  - Borderline-SMOTE  
+  - ADASYN (Adaptive Synthetic Sampling)  
+  - SMOTE-ENN / SMOTE-Tomek Links (SMOTE combined with data cleaning)  
+- **Cluster-Based Oversampling:** Generate synthetic samples within minority class clusters.  
 
-This step is critical to improve the model’s sensitivity to stroke cases, aiming to increase recall and F1 scores for the minority class.
 
 ---
+
+### Algorithm-Level Techniques
+
+- **Ensemble Methods for Imbalance:**  
+  - Balanced Random Forest  
+  - EasyEnsemble and BalanceCascade  
+  - RUSBoost and SMOTEBoost  
+- **One-Class Classification / Anomaly Detection:** Model majority class and detect minority as anomalies.  
+- **Custom Loss Functions:** Use weighted loss or focal loss in neural networks to emphasize minority class.
+
+---
+
+### Evaluation and Validation Techniques
+
+- Use imbalance-sensitive metrics:  
+  - Precision, Recall, F1-score (focus on minority class)  
+  - ROC AUC, Precision-Recall AUC  
+  - Matthews Correlation Coefficient (MCC)  
+  - Cohen’s Kappa  
+  - Balanced Accuracy  
+- Use stratified train/test splits and cross-validation to preserve class ratios.  
+- Analyze confusion matrices for detailed error insights.
+
+---
+
+
 
 ## 7. Model Evaluation
 
@@ -511,24 +543,15 @@ Multiple classifiers were trained and evaluated on the stroke prediction task. D
 - Improving minority class recall and precision remains the critical challenge.
 - Further steps should focus on advanced class imbalance techniques, threshold tuning, and potentially ensemble or specialized models tailored for stroke prediction.
 
----## Model Training and Evaluation with Selected Features
+
+
+## Final Model Training and Evaluation with Selected Features
 
 ### Overview
 
 Based on previous feature subset selection, we trained a deep neural network model using the top-performing features:  
 `['age', 'hypertension', 'Residence_type', 'bmi', 'segment']`  
 to predict stroke occurrence.
-
-### Data Preparation
-
-- Selected key features and target variable (`stroke`).
-- Converted categorical features (`Residence_type`, `segment`) to categorical type for appropriate encoding.
-- Split the data into training (80%) and testing (20%) sets with stratification on the target to preserve class distribution.
-
-### Preprocessing
-
-- Numeric features were standardized using `StandardScaler`.
-- Categorical features were encoded with `OneHotEncoder` (dropping the first category to prevent multicollinearity).
 
 ### Model Architecture
 
@@ -554,7 +577,6 @@ to predict stroke occurrence.
 - Used the precision-recall curve to identify the optimal classification threshold maximizing the F1 score.
 - Reported final F1 score, ROC AUC, and classification report on the test set.
 
-### Results
 
 ### Feature Subset Selection Results
 
@@ -670,7 +692,7 @@ To interpret the model’s decisions, we used **SHAP (SHapley Additive exPlanati
 - This aligns with medical understanding that age is a strong risk factor for stroke.
 
 
-## #9 Deployment
+## #9. Deployment
 
 **Stroke Prediction Streamlit App**
 
@@ -695,7 +717,7 @@ This project includes a user-friendly Streamlit web application for predicting s
   - **Stroke Quiz:** A short quiz to increase user awareness of stroke facts.  
   - **Habit Tracker:** Tracks healthy habits with a gamified points system and progress bar.
     
-## #10 Challenges and lessons learned
+## #10. Challenges and lessons learned
 
 ### Challenges
 
