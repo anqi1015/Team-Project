@@ -594,23 +594,22 @@ to predict stroke occurrence.
 - Used the precision-recall curve to identify the optimal classification threshold maximizing the F1 score.
 - Reported final F1 score, ROC AUC, and classification report on the test set.
 
-
 ## Top 10 Feature Subsets by F1 Score
 
 After running 100 randomized trials of feature subset combinations with our neural network model, the top 10 performing feature subsets ranked by F1 score on the test set were:
 
-| Rank | Features                                                                                       | F1 Score | ROC AUC |
-|------|------------------------------------------------------------------------------------------------|----------|---------|
-| 1    | (age, avg_glucose_level, bmi, risk_score, segment)                                            | 0.3815   | 0.8493  |
-| 2    | (age, hypertension, heart_disease, ever_married, avg_glucose_level, bmi, risk_score, segment) | 0.3776   | 0.8512  |
-| 3    | (age, hypertension, heart_disease, ever_married, work_type, avg_glucose_level, bmi, risk_score, segment) | 0.3742   | 0.8487  |
-| 4    | (age, heart_disease, ever_married, Residence_type, avg_glucose_level, risk_score, segment)    | 0.3723   | 0.8480  |
-| 5    | (age, hypertension, ever_married, work_type, avg_glucose_level, bmi, smoking_status, risk_score) | 0.3718 | 0.8389  |
-| 6    | (age, heart_disease, ever_married, avg_glucose_level, bmi, smoking_status)                    | 0.3618   | 0.8434  |
-| 7    | (gender, age, hypertension, heart_disease, ever_married, work_type, Residence_type, avg_glucose_level, bmi, risk_score) | 0.3617 | 0.8387  |
-| 8    | (age, hypertension, ever_married, work_type, Residence_type, avg_glucose_level, risk_score)   | 0.3577   | 0.8441  |
-| 9    | (gender, age, hypertension, ever_married, bmi)                                                | 0.3571   | 0.8300  |
-| 10   | (age, hypertension, heart_disease, avg_glucose_level, smoking_status, risk_score, segment)    | 0.3537   | 0.8330  |
+| Rank | Features                                                                                         | F1 Score | ROC AUC |
+|-------|------------------------------------------------------------------------------------------------|----------|---------|
+| 1     | (age, hypertension, ever_married, work_type, Residence_type, avg_glucose_level, bmi, smoking_status) | 0.4091   | 0.8444  |
+| 2     | (gender, age, hypertension, heart_disease, ever_married, work_type, avg_glucose_level, bmi, smoking_status, segment) | 0.3977 | 0.8522  |
+| 3     | (gender, age, heart_disease, work_type, Residence_type, bmi, segment)                            | 0.3735   | 0.8479  |
+| 4     | (gender, age, hypertension, work_type, avg_glucose_level, bmi, smoking_status, segment)          | 0.3681   | 0.8434  |
+| 5     | (age, hypertension, ever_married, work_type, Residence_type, avg_glucose_level, bmi, risk_score) | 0.3646   | 0.8327  |
+| 6     | (age, hypertension, heart_disease, Residence_type, avg_glucose_level, bmi, smoking_status, risk_score) | 0.3646 | 0.8362  |
+| 7     | (age, hypertension, ever_married, bmi, smoking_status, segment)                                  | 0.3626   | 0.8403  |
+| 8     | (gender, age, hypertension, work_type, bmi, segment)                                            | 0.3613   | 0.8458  |
+| 9     | (gender, age, heart_disease, ever_married, work_type, Residence_type, avg_glucose_level, bmi, risk_score, segment) | 0.3611 | 0.8313  |
+| 10    | (gender, age, bmi, smoking_status, risk_score, segment)                                         | 0.3586   | 0.8334  |
 
 ---
 
