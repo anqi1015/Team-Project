@@ -700,7 +700,7 @@ This project includes a user-friendly Streamlit web application for predicting s
 ### Challenges
 
 - **Class Imbalance:**  
-  The dataset had a large imbalance between stroke and non-stroke cases, making it difficult for the model to accurately predict minority class events. Addressed this with SMOTE oversampling.
+  The dataset had a large imbalance between stroke and non-stroke cases, making it difficult for the model to accurately predict minority class events.
 
 - **Missing Data:**  
   Missing values in key numeric features like BMI required careful imputation to maintain data integrity and prevent bias.
