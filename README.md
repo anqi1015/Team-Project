@@ -198,7 +198,7 @@ Certain extreme values in **bmi** and **avg_glucose_level** were identified as o
 - The `id` column was dropped as it does not contribute to prediction.
 ---
 
-## 3-Exploratory-Data-Analysis
+## 3 Exploratory Data Analysis
 
 
 
@@ -325,7 +325,7 @@ Understanding how stroke probability changes across these features helps in:
 
 
 ---
-## #4-feature-engineering
+## #4 feature engineering
 
 
 ## Automated Risk Score Summary
@@ -670,7 +670,7 @@ To interpret the model’s decisions, we used **SHAP (SHapley Additive exPlanati
 - This aligns with medical understanding that age is a strong risk factor for stroke.
 
 
-## #9-deployment
+## #9 Deployment
 
 **Stroke Prediction Streamlit App**
 
@@ -695,7 +695,7 @@ This project includes a user-friendly Streamlit web application for predicting s
   - **Stroke Quiz:** A short quiz to increase user awareness of stroke facts.  
   - **Habit Tracker:** Tracks healthy habits with a gamified points system and progress bar.
     
-## #10-challenges-and-lessons-learned
+## #10 Challenges and lessons learned
 
 ### Challenges
 
