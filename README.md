@@ -665,8 +665,69 @@ To interpret the model’s decisions, we used **SHAP (SHapley Additive exPlanati
 
 ![SHAP Summary Plot](Images/shap.png)
 
-- 🔹 **Age** was found to be the **most important feature** driving stroke predictions.
-- 🔹 Other influential features included `avg_glucose_level`, `bmi`, and `hypertension`.
+- **Age** was found to be the **most important feature** driving stroke predictions.
+- Other influential features included `avg_glucose_level`, `bmi`, and `hypertension`.
 - This aligns with medical understanding that age is a strong risk factor for stroke.
 
+
+## #9-deployment
+
+**Stroke Prediction Streamlit App**
+
+This project includes a user-friendly Streamlit web application for predicting stroke risk based on user health inputs.
+
+### Features
+
+- **User Input Form**  
+  Collects health details including age, gender, hypertension, heart disease, marital status, work type, residence type, average glucose level, BMI, and smoking status.
+
+- **Data Preprocessing & Model Training**  
+  - Median imputation for missing numeric values  
+  - One-hot encoding for categorical variables  
+  - SMOTE oversampling to address class imbalance  
+  - Logistic Regression classifier trained on balanced data
+
+- **Prediction & Feedback**  
+  Provides stroke risk probability with clear, styled output. High risk prompts an alert advising medical consultation.
+
+- **Interactive Sections**  
+  - **Stroke Information Chatbot:** Answers questions about stroke symptoms, risk factors, and emergency response (FAST).  
+  - **Stroke Quiz:** A short quiz to increase user awareness of stroke facts.  
+  - **Habit Tracker:** Tracks healthy habits with a gamified points system and progress bar.
+    
+## #10-challenges-and-lessons-learned
+
+### Challenges
+
+- **Class Imbalance:**  
+  The dataset had a large imbalance between stroke and non-stroke cases, making it difficult for the model to accurately predict minority class events. Addressed this with SMOTE oversampling.
+
+- **Missing Data:**  
+  Missing values in key numeric features like BMI required careful imputation to maintain data integrity and prevent bias.
+
+- **Feature Engineering:**  
+  Managing categorical variables with multiple categories necessitated proper encoding (one-hot encoding) and seamless integration into the preprocessing pipeline.
+
+- **Model Selection and Tuning:**  
+  Balancing interpretability and predictive performance was challenging. Logistic regression was selected, with class weighting and threshold tuning to improve results.
+
+- **Explainability:**  
+  Incorporating SHAP values helped interpret model predictions but added complexity to the workflow.
+
+- **User Interface Design:**  
+  Creating an engaging, educational, and easy-to-use app with features like a chatbot, quiz, and habit tracker required thoughtful design and customization.
+
+### Lessons Learned
+
+- Robust data preprocessing pipelines are essential for handling mixed data types and ensuring reproducibility.
+
+- Effective handling of class imbalance (e.g., using SMOTE) improves minority class prediction performance.
+
+- Model explainability tools such as SHAP increase trust and transparency in predictions.
+
+- Enhancing user engagement through interactive and educational app features adds value beyond basic prediction.
+
+- Iterative experimentation with preprocessing, modeling, and evaluation parameters leads to better outcomes.
+
+- Streamlit is a powerful tool for quickly deploying interactive machine learning applications with a clean user interface.
 
