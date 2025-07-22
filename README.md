@@ -196,7 +196,7 @@ Certain extreme values in **bmi** and **avg_glucose_level** were identified as o
 - BMI values greater than 70 were considered implausible for the population.
 - Glucose levels above 270 mg/dL, which are physiologically extreme, were examined.
 - The `gender` column contained a small number of records labeled as `"Other"`. Due to their scarcity and unclear definition, these records were removed.
-- - The `work_type` category **'Children'** applies to individuals under 18 years old. For modeling consistency, all `'Children'` entries were grouped under the category **"Never_worked"**. This consolidation simplifies the work type variable and aligns with logical age restrictions.
+- The `work_type` category **'Children'** applies to individuals under 18 years old. For modeling consistency, all `'Children'` entries were grouped under the category **"Never_worked"**. This consolidation simplifies the work type variable and aligns with logical age restrictions.
 - The `id` column was dropped as it does not contribute to prediction.
 ---
 
@@ -212,8 +212,8 @@ The dataset exhibits a strong class imbalance:
 
 | Stroke Status | Count | Percentage |
 |---------------|-------|------------|
-| No Stroke (0) | 4,939 | 96.7%      |
-| Stroke (1)    | 171   | 3.3%       |
+| No Stroke (0) | 4,861 | 95.1%      |
+| Stroke (1)    | 249   | 4.9%       |
 
 This imbalance poses a risk that naive models may simply predict the majority class, leading to misleadingly high accuracy but poor recall for stroke cases. Therefore, metrics like F1-score, precision, and recall must be emphasized in model evaluation.
 
@@ -221,23 +221,40 @@ This imbalance poses a risk that naive models may simply predict the majority cl
 
 ![Features Graph](Images/stroke_feature_comparison.png)
 
-#### Age
 
-- Age is distributed approximately normally but skewed slightly toward older age groups.
-- Histogram and kernel density estimates (KDE) showed that stroke incidence increases sharply with age, particularly beyond 60 years.
-- Median age for stroke patients is notably higher compared to non-stroke patients.
+### Age Distribution
 
-#### Average Glucose Level
+- **Observation**:
+  - Non-stroke individuals are evenly distributed across all age groups from 20 to 80.
+  - Stroke cases are concentrated in older age groups, especially **ages 50 and above**.
 
-- Glucose levels span a broad range, with a mean around 106 mg/dL.
-- The distribution is right-skewed with a long tail of high glucose values.
-- Stroke risk markedly increases when glucose exceeds approximately 175 mg/dL, suggesting a non-linear relationship.
+- **Insight**:
+  - **Age is a strong predictor** of stroke. 
+  - The likelihood of stroke increases significantly with age.
 
-#### Body Mass Index (BMI)
+---
 
-- BMI data showed a near-normal distribution with some skewness.
-- The relationship with stroke is non-linear and somewhat inconsistent, with stroke risk fluctuating across BMI ranges.
-- Outliers with extremely high BMI were removed prior to analysis.
+### BMI Distribution
+
+- **Observation**:
+  - BMI for both groups follows a **normal distribution** centered around **25–30**.
+  - A slight increase in stroke cases is observed at higher BMI levels.
+
+- **Insight**:
+  - **BMI has a mild correlation** with stroke risk.
+  - It may not be a standalone predictor but can enhance model performance when combined with other features.
+
+---
+
+### Average Glucose Level Distribution
+
+- **Observation**:
+  - The distribution is **right-skewed**, with most individuals having glucose levels between **80–150 mg/dL**.
+  - Stroke cases are noticeably more frequent in individuals with **glucose levels above 150 mg/dL**.
+
+- **Insight**:
+  - **High glucose levels**, potentially indicating diabetes or prediabetes, show a **strong association** with stroke.
+  - This feature is likely **highly important** in prediction models.
 
 ### Categorical Variable Analysis
 
@@ -359,7 +376,7 @@ The table below shows the main risk factors identified, the high-risk category f
 
 ---
 
-### How the Automated Risk Score is Calculated:
+### How the Risk Score is Calculated:
 
 1. **Identification of Risk Factors:** For each individual, presence or absence of the high-risk category for each factor is determined (e.g., hypertension = 1 means “has hypertension”).
 2. **Assigning Weights:** Each risk factor is assigned a weight proportional to its contribution to stroke risk based on the risk increase observed in the dataset.
@@ -578,36 +595,39 @@ to predict stroke occurrence.
 - Reported final F1 score, ROC AUC, and classification report on the test set.
 
 
-### Feature Subset Selection Results
+## Top 10 Feature Subsets by F1 Score
 
 After running 100 randomized trials of feature subset combinations with our neural network model, the top 10 performing feature subsets ranked by F1 score on the test set were:
 
-| Rank | Features                                                        | F1 Score | ROC AUC |
-|-------|----------------------------------------------------------------|----------|---------|
-| 1     | (age, hypertension, Residence_type, bmi, segment)              | 0.3840   | 0.8398  |
-| 2     | (age, hypertension, work_type)                                 | 0.3692   | 0.8287  |
-| 3     | (age, hypertension, ever_married, work_type, avg_glucose_level)| 0.3548   | 0.8339  |
-| 4     | (age, hypertension, ever_married, bmi, smoking_status)          | 0.3529   | 0.8128  |
-| 5     | (gender, age, heart_disease, ever_married, work_type)           | 0.3516   | 0.8312  |
-| 6     | (gender, age, avg_glucose_level, risk_score)                    | 0.3500   | 0.8318  |
-| 7     | (age, ever_married, avg_glucose_level, bmi, segment)            | 0.3488   | 0.8178  |
-| 8     | (age, hypertension, work_type, Residence_type, smoking_status)  | 0.3452   | 0.8153  |
-| 9     | (age, heart_disease, ever_married, Residence_type, smoking_status) | 0.3425 | 0.8302  |
-| 10    | (age, hypertension, bmi, segment)                               | 0.3407   | 0.8227  |
+| Rank | Features                                                                                       | F1 Score | ROC AUC |
+|------|------------------------------------------------------------------------------------------------|----------|---------|
+| 1    | (age, avg_glucose_level, bmi, risk_score, segment)                                            | 0.3815   | 0.8493  |
+| 2    | (age, hypertension, heart_disease, ever_married, avg_glucose_level, bmi, risk_score, segment) | 0.3776   | 0.8512  |
+| 3    | (age, hypertension, heart_disease, ever_married, work_type, avg_glucose_level, bmi, risk_score, segment) | 0.3742   | 0.8487  |
+| 4    | (age, heart_disease, ever_married, Residence_type, avg_glucose_level, risk_score, segment)    | 0.3723   | 0.8480  |
+| 5    | (age, hypertension, ever_married, work_type, avg_glucose_level, bmi, smoking_status, risk_score) | 0.3718 | 0.8389  |
+| 6    | (age, heart_disease, ever_married, avg_glucose_level, bmi, smoking_status)                    | 0.3618   | 0.8434  |
+| 7    | (gender, age, hypertension, heart_disease, ever_married, work_type, Residence_type, avg_glucose_level, bmi, risk_score) | 0.3617 | 0.8387  |
+| 8    | (age, hypertension, ever_married, work_type, Residence_type, avg_glucose_level, risk_score)   | 0.3577   | 0.8441  |
+| 9    | (gender, age, hypertension, ever_married, bmi)                                                | 0.3571   | 0.8300  |
+| 10   | (age, hypertension, heart_disease, avg_glucose_level, smoking_status, risk_score, segment)    | 0.3537   | 0.8330  |
+
+---
 
 **Interpretation:**
 
-- Age and hypertension consistently appear in nearly all top subsets, confirming their strong predictive power for stroke.
-- Other influential features include BMI, residence type, work type, and smoking status, reflecting important lifestyle and health risk factors.
-- The best subsets achieve F1 scores around 0.34 to 0.38 and ROC AUC around 0.81 to 0.84, indicating moderate but meaningful predictive performance given the imbalanced data.
-
-These results helped us identify key variables to focus on for further model development and interpretability analysis.
+- **Age** appears in every top-performing combination, confirming its dominant role in stroke prediction.
+- Other frequent features include **avg_glucose_level**, **risk_score**, **bmi**, and **hypertension**—all key clinical or lifestyle indicators.
+- The best F1 scores range from **0.3537 to 0.3815**, while ROC AUCs range from **0.8300 to 0.8512**.
+- These subsets achieve significantly higher recall for stroke cases compared to earlier models, at the cost of lower precision—helpful in high-sensitivity screening scenarios.
+- Feature engineering elements like **risk_score** and **segment** appear in most top models, indicating added value from derived features.
+- This analysis helps guide future work on model refinement, especially for minority class (stroke) detection.
 
 
 
 ### Feature Subset Selection
 
-To identify the most informative features, we performed a randomized grid search over subsets of 3 to 12 features, evaluating each subset using a neural network classifier with stratified train/test splits. The goal was to maximize the F1 score due to class imbalance.
+To identify the most informative features, we performed a randomized grid search over subsets of 1 to 12 features, evaluating each subset using a neural network classifier with stratified train/test splits. The goal was to maximize the F1 score due to class imbalance.
 
 The top-performing feature subset was:
 
@@ -641,23 +661,30 @@ We implemented a deep neural network with the following characteristics:
 
 The model was evaluated on a held-out test set (20% of data, stratified).
 
-| Metric               | Value  |
-|----------------------|--------|
+## Model Evaluation Metrics
+
+| Metric                | Value  |
+|-----------------------|--------|
 | Best F1 Threshold     | 0.753  |
-| F1 Score             | 0.3429 |
+| F1 Score              | 0.3429 |
 | Area Under Curve (AUC)| 0.8161 |
-| Accuracy             | 0.93   |
+| Accuracy              | 0.89   |
+
+---
 
 ### Detailed Classification Report
 
 | Class      | Precision | Recall | F1-Score | Support |
 |------------|-----------|--------|----------|---------|
-| No Stroke  | 0.97      | 0.96   | 0.96     | 972     |
-| Stroke     | 0.33      | 0.36   | 0.34     | 50      |
+| No Stroke  | 0.98      | 0.91   | 0.94     | 972     |
+| Stroke     | 0.25      | 0.58   | 0.35     | 50      |
 
-- The model shows high precision and recall for identifying patients without stroke.
-- Detection of stroke cases is more challenging, with modest precision and recall due to class imbalance and limited positive examples.
-- The overall AUC of 0.8161 suggests good discrimination capability between stroke and non-stroke cases.
+- The model demonstrates strong performance for predicting non-stroke cases, with high precision and recall.
+- Stroke prediction remains challenging due to significant class imbalance:
+  - Precision is modest at 0.25, indicating some false positives.
+  - Recall has improved to 0.58, suggesting the model is identifying more true stroke cases.
+- The overall AUC of 0.8161 reflects good discrimination between stroke and non-stroke cases.
+- Using a tuned threshold of 0.753 helps balance precision and recall for the minority class.
 
 ---
 
