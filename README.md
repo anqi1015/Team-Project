@@ -10,10 +10,11 @@
 4. [Feature Engineering](#4-feature-engineering)  
 5. [Model Selection and Development](#5-model-selection-and-development)  
 6. [Handling Class Imbalance](#6-handling-class-imbalance)  
-7. [Model Evaluation](#7-model-evaluation)  
-8. [Interpretability and Explainability](#8-interpretability-and-explainability)  
-9. [Deployment](#9-deployment)  
-10. [Challenges and Lessons Learned](#10-challenges-and-lessons-learned)  
+7. [Model Evaluation](#7-model-evaluation)
+8. [Final Model](#8-final-model)
+9. [Interpretability and Explainability](#9-interpretability-and-explainability)  
+10. [Deployment](#10-deployment)  
+11. [Challenges and Lessons Learned](#11-challenges-and-lessons-learned)  
 
 
 ---
@@ -679,9 +680,47 @@ The model was evaluated on a held-out test set (20% of data, stratified).
 - Incorporating categorical variables such as Residence_type and segment improves contextual risk profiling.
 - Neural networks can model complex feature interactions but may require larger datasets or additional balancing methods for rare outcomes.
 
----
 
-## 8. Interpretability and Explainability
+
+
+## 8. Final Model 
+
+We selected this SGDClassifier model because it strikes an effective balance between correctly identifying stroke cases and maintaining overall predictive performance, which is critical in medical diagnosis.
+
+### Key Performance Metrics
+
+- **Best threshold for F1 score:** 0.605  
+- **F1 Score (stroke):** 0.3396  
+- **AUC Score:** 0.8474  
+
+### Detailed Classification Performance
+
+| Class       | Precision | Recall | F1-Score | Support |
+|-------------|-----------|--------|----------|---------|
+| No Stroke   | 0.98      | 0.87   | 0.92     | 972     |
+| Stroke      | 0.22      | 0.72   | 0.34     | 50      |
+
+- **Overall accuracy:** 86%  
+- **Macro average F1 score:** 0.63  
+- **Weighted average F1 score:** 0.90  
+
+### Why This Model?
+
+- **High AUC (0.8474):** This indicates the model has strong ability to distinguish between stroke and non-stroke cases overall.
+
+- **Emphasis on Recall for Stroke (72%):** Prioritizing recall is vital in stroke prediction because missing true stroke cases (false negatives) can have severe health consequences. The model correctly identifies most stroke patients.
+
+- **Acceptable Precision Trade-off (22%):** While precision is lower due to class imbalance, it is acceptable in this screening context where detecting as many true stroke cases as possible is more important than avoiding false positives.
+
+- **Balanced F1 Score:** The stroke class F1 score reflects a good balance between precision and recall given the imbalanced dataset.
+
+- **Strong Performance on No-Stroke Class:** High precision and recall for non-stroke cases ensure the model minimizes unnecessary alerts.
+
+### Summary
+
+This model was chosen for its strong discrimination power and critical ability to detect the minority class (stroke) effectively, aligning with the goal of early stroke detection and timely intervention.
+
+## 9. Interpretability and Explainability
 
 While model accuracy and metrics are important, explainability is critical in healthcare applications such as stroke prediction.
 
@@ -703,7 +742,7 @@ To interpret the model’s decisions, we used **SHAP (SHapley Additive exPlanati
 - This aligns with medical understanding that age is a strong risk factor for stroke.
 
 
-## #9. Deployment
+## 10. Deployment
 
 **Stroke Prediction Streamlit App**
 
@@ -728,7 +767,7 @@ This project includes a user-friendly Streamlit web application for predicting s
   - **Stroke Quiz:** A short quiz to increase user awareness of stroke facts.  
   - **Habit Tracker:** Tracks healthy habits with a gamified points system and progress bar.
     
-## 10. Challenges and lessons learned
+## 11. Challenges and lessons learned
 
 ### Challenges
 
