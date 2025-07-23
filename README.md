@@ -564,11 +564,6 @@ Multiple classifiers were trained and evaluated on the stroke prediction task. D
 
 ## Final Model Training and Evaluation with Selected Features
 
-### Overview
-
-Based on previous feature subset selection, we trained a deep neural network model using the top-performing features:  
-`['age', 'hypertension', 'Residence_type', 'bmi', 'segment']`  
-to predict stroke occurrence.
 
 ### Model Architecture
 
@@ -638,25 +633,15 @@ The top-performing feature subset was:
 
 ---
 
-## Model Architecture and Training
-
-### Model Design
-
-We implemented a deep neural network with the following characteristics:
-
-- Input layer matching the processed feature dimensionality
-- Three hidden layers with 128, 64, and 32 neurons respectively, each followed by batch normalization and dropout layers to reduce overfitting
-- Output layer with sigmoid activation for binary classification
-
-### Training Details
-
-- Used class weights to counteract the imbalance between stroke and no-stroke classes
-- Employed early stopping and learning rate reduction callbacks to prevent overtraining and improve convergence
-- Trained for up to 50 epochs with validation splits
-
----
 
 ## Evaluation Results
+
+### Overview
+
+Based on previous feature subset selection, we trained a deep neural network model using the top-performing features:  
+(``age``, `hypertension`, `ever_married`, `work_type`, `Residence_type`, `avg_glucose_level`, `bmi`, `smoking_status`)  
+to predict stroke occurrence.
+
 
 The model was evaluated on a held-out test set (20% of data, stratified).
 
