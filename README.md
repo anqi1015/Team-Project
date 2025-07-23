@@ -342,10 +342,10 @@ Understanding how stroke probability changes across these features helps in:
   
 
 ---
-## #4 feature engineering
+## 4 feature engineering
 
 
-## Risk Score Summary
+### Risk Score Summary
 
 The **Risk Score** is designed to quantify an individual’s risk of stroke by combining multiple key risk factors. This score helps in stratifying patients based on their likelihood of experiencing a stroke, aiding clinicians in early detection and targeted interventions.
 
@@ -743,7 +743,7 @@ This project includes a user-friendly Streamlit web application for predicting s
   - **Stroke Quiz:** A short quiz to increase user awareness of stroke facts.  
   - **Habit Tracker:** Tracks healthy habits with a gamified points system and progress bar.
     
-## #10. Challenges and lessons learned
+## 10. Challenges and lessons learned
 
 ### Challenges
 
