@@ -472,7 +472,7 @@ This ensemble employs **soft voting**, averaging predicted probabilities from ea
 
 ---
 
-## Neural Network Model Results
+## Neural Network Model Implemented
 
 ### Architecture and Training
 
