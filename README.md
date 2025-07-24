@@ -255,7 +255,7 @@ This imbalance poses a risk that naive models may simply predict the majority cl
 - **Gender:** After excluding rare 'Other' category, stroke prevalence was similar across male and female patients.
 - **Hypertension:** Strong positive association with stroke; hypertensive patients had significantly higher stroke incidence.
 - **Heart Disease:** Similarly, heart disease presence correlated strongly with stroke.
-- **Smoking Status:** Current and former smokers had higher stroke rates compared to never smokers.
+- **Smoking Status:** Current and former smokers had higher stroke rates compared to those who have never smoked before.
 - **Work Type and Residence Type:** No substantial difference in stroke prevalence detected.
 
 ### Feature Interaction Analysis
@@ -293,7 +293,6 @@ The top 20 features ranked by their importance in the model are shown below:
 - **Age** emerged as the most important predictor, consistent with medical knowledge that stroke risk increases with age.
 - **Average glucose level** was also highly predictive, reflecting the impact of blood sugar on stroke risk.
 - Medical history indicators such as **hypertension** and **heart disease** showed strong contributions.
-- Interaction features and engineered polynomial terms, where included, also showed meaningful influence.
 
 This analysis informed further feature engineering and model tuning efforts.
 
@@ -311,20 +310,29 @@ Each variable was divided into 10 equal-width bins. For each bin, we calculated 
 
 ![Stroke Probability Trends](Images/stroke_probability.png)
 
-1. **Stroke Probability vs BMI**  
-   - Stroke risk is relatively flat across normal to slightly overweight BMI ranges.
-   - There is a noticeable uptick in stroke probability in individuals with **very high BMI**, suggesting possible obesity-related cardiovascular risk.
-   - The relationship is not strictly linear—this justifies using **binning or polynomial transformations** rather than treating BMI as a purely linear feature.
+## 1. Stroke Probability vs **BMI**
 
-2. **Stroke Probability vs Average Glucose Level**  
-   - A clear positive relationship exists between glucose levels and stroke probability.
-   - Stroke risk remains low until around **150–180 mg/dL**, after which it **rises sharply**.
-   - This trend reflects the heightened stroke risk in patients with **diabetes or prediabetes**, confirming that glucose level is a key predictive feature.
+- Stroke probability **increases with BMI** and **peaks around 32**, suggesting elevated risk in individuals who are moderately overweight.
+- After the peak, stroke probability **declines sharply**, reaching **0% at BMI values above 66** in the dataset.
+- The trend is **non-linear and unimodal**, indicating that BMI should **not** be treated as a purely linear feature.
 
-3. **Stroke Probability vs Age**  
-   - Stroke probability **increases exponentially with age**.
-   - Particularly after age **60**, the risk increases steeply, supporting the common medical knowledge that stroke is more prevalent in older populations.
-   - This feature shows the strongest monotonic relationship, making **age a critical component in any risk scoring model**.
+---
+
+## 2. Stroke Probability vs **Average Glucose Level**
+
+- Stroke probability remains relatively stable and low **up to ~170 mg/dL**.
+- Beyond that point, there is a **sharp increase**, especially after **200 mg/dL**, with stroke probability reaching **20% at 260 mg/dL**.
+- This suggests strong correlation between **hyperglycemia (high blood sugar)** and stroke risk.
+
+
+---
+
+## 3. Stroke Probability vs **Age**
+
+- Stroke probability is minimal at younger ages, begins to rise gradually after **age 40**, and **increases steeply after age 60**.
+- Peaks at **20% by age 78**, showing a **clear exponential trend**.
+- Implications that age has the **strongest monotonic and exponential relationship** with stroke probability.
+
 
 ### Why This Matters
 
