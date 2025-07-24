@@ -192,12 +192,12 @@ Accurate imputation of BMI is vital for stroke risk modeling. Our analysis shows
 
 ### Outlier Detection and Column Removal
 
-Certain extreme values in **bmi** and **avg_glucose_level** were identified as outliers that could skew model training:
+Certain extreme values in `bmi` and `avg_glucose_level` were identified as outliers that could skew model training:
 
 - BMI values greater than 70 were considered implausible for the population.
 - Glucose levels above 270 mg/dL, which are physiologically extreme, were examined.
 - The `gender` column contained a small number of records labeled as `"Other"`. Due to their scarcity and unclear definition, these records were removed.
-- The `work_type` category **'Children'** applies to individuals under 18 years old. For modeling consistency, all `'Children'` entries were grouped under the category **"Never_worked"**. This consolidation simplifies the work type variable and aligns with logical age restrictions.
+- The `work_type` category `Children` applies to individuals under 18 years old. For modeling consistency, all `Children` entries were grouped under the category `Never_worked`. This consolidation simplifies the work type variable and aligns with logical age restrictions.
 - The `id` column was dropped as it does not contribute to prediction.
 ---
 
@@ -233,7 +233,6 @@ This imbalance poses a risk that naive models may simply predict the majority cl
   - **Age is a strong predictor** of stroke. 
   - The likelihood of stroke increases significantly with age.
 
----
 
 ### BMI Distribution
 
@@ -245,7 +244,6 @@ This imbalance poses a risk that naive models may simply predict the majority cl
   - **BMI has a mild correlation** with stroke risk.
   - It may not be a standalone predictor but can enhance model performance when combined with other features.
 
----
 
 ### Average Glucose Level Distribution
 
@@ -350,7 +348,6 @@ Understanding how stroke probability changes across these features helps in:
 
 The **Risk Score** is designed to quantify an individual’s risk of stroke by combining multiple key risk factors. This score helps in stratifying patients based on their likelihood of experiencing a stroke, aiding clinicians in early detection and targeted interventions.
 
----
 
 ### Key Risk Factors and Their Impact on Stroke Risk
 
@@ -366,7 +363,7 @@ The table below shows the main risk factors identified, the high-risk category f
 | **Smoking Status**| Formerly Smoked          | 7.92%                  | 4.24%               | 3.68%                      | 0.29            |
 | **Residence Type**| Urban                    | 5.20%                  | 4.53%               | 0.67%                      | 0.05            |
 
----
+
 
 ### Explanation of Terms:
 
@@ -375,7 +372,6 @@ The table below shows the main risk factors identified, the high-risk category f
 - **Risk Increase:** The absolute increase in stroke rate attributed to the presence of the high-risk factor (difference between high risk and others).
 - **Relative Weight:** A normalized value representing the importance of each risk factor when calculating the overall risk score. The highest risk factor (heart disease) is assigned a weight of 1, and others are scaled accordingly.
 
----
 
 ### How the Risk Score is Calculated:
 
@@ -384,7 +380,6 @@ The table below shows the main risk factors identified, the high-risk category f
 3. **Summation of Scores:** The individual's overall risk score is calculated by summing the weights of all risk factors present.
 4. **Risk Stratification:** Higher risk scores correspond to higher likelihood of stroke, enabling categorization into risk groups (e.g., low, moderate, high).
 
----
 
 ### Purpose and Benefits of the Risk Score
 
@@ -394,9 +389,6 @@ The table below shows the main risk factors identified, the high-risk category f
 - **Facilitates Patient Communication:** The score can be used to explain stroke risk to patients in a straightforward manner.
 
 ---
-
-This automated approach enhances stroke prediction models by integrating clinical and demographic risk factors into a cohesive scoring system, improving decision-making and patient outcomes.
-
 
 
 ## Clustering for Risk Segmentation
@@ -470,9 +462,8 @@ An ensemble model was built combining four strong classifiers with balanced clas
 
 This ensemble employs **soft voting**, averaging predicted probabilities from each model for robust final predictions.
 
----
 
-## Neural Network Model Implemented
+### Neural Network Model Implemented
 
 ### Architecture and Training
 
@@ -482,7 +473,6 @@ This ensemble employs **soft voting**, averaging predicted probabilities from ea
 - Optimized with binary cross-entropy loss and Adam optimizer.
 - Early stopping and learning rate reduction on plateau were used to prevent overfitting and improve convergence.
 
----
 
 This comprehensive exploration and modular pipeline design allow for systematic experimentation and robust stroke risk modeling.
 
@@ -502,8 +492,6 @@ This comprehensive exploration and modular pipeline design allow for systematic 
 - **Cluster-Based Oversampling:** Generate synthetic samples within minority class clusters.  
 
 
----
-
 ### Algorithm-Level Techniques
 
 - **Ensemble Methods for Imbalance:**  
@@ -513,7 +501,6 @@ This comprehensive exploration and modular pipeline design allow for systematic 
 - **One-Class Classification / Anomaly Detection:** Model majority class and detect minority as anomalies.  
 - **Custom Loss Functions:** Use weighted loss or focal loss in neural networks to emphasize minority class.
 
----
 
 ### Evaluation and Validation Techniques
 
@@ -725,7 +712,7 @@ This project includes a user-friendly Streamlit web application for predicting s
 ## Features
 
 ### User Health Input
-Interactive form collects key health features:
+
 - Age, Gender, Hypertension, Heart Disease  
 - Marital Status, Work Type, Residence Type  
 - Average Glucose Level, BMI, Smoking Status  
