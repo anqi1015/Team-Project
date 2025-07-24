@@ -699,12 +699,12 @@ Although not covered explicitly in this implementation, the next steps involve a
 These tools will aid in understanding how models make decisions, increasing clinical trust and facilitating actionable insights for practitioners.
 
 
-To interpret the model’s decisions, we used **SHAP (SHapley Additive exPlanations)** via `KernelExplainer` on the trained neural network.
+To interpret the model’s decisions, we used **SHAP (SHapley Additive exPlanations)** via KernelExplainer on the trained neural network.
 
 ![SHAP Summary Plot](Images/shap.png)
 
 - **Age** was found to be the **most important feature** driving stroke predictions.
-- Other influential features included `work_type' and 'segment'
+- Other influential features included `work_type` and `segment`
 - This aligns with medical understanding that age is a strong risk factor for stroke.
 
 ---
@@ -733,7 +733,7 @@ This project includes a user-friendly Streamlit web application for predicting s
 - **Segmentation**: Clustering (KMeans + silhouette analysis) segments users into:
   - Low Risk, Moderate Risk, Elevated Risk, High Risk
 - **Final Classifier**:  
-  - **SGDClassifier** (`modified_huber` loss, balanced class weights)
+  - **SGDClassifier** (modified_huber loss, balanced class weights)
   - Trained on preprocessed features + risk score + cluster segment
   - **Threshold tuning** for optimal F1-score
 
