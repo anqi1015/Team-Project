@@ -347,14 +347,34 @@ Understanding how stroke probability changes across these features helps in:
 ## 4 feature engineering
 
 
-### Risk Score Summary
-
-The **Risk Score** is designed to quantify an individual’s risk of stroke by combining multiple key risk factors. This score helps in stratifying patients based on their likelihood of experiencing a stroke, aiding clinicians in early detection and targeted interventions.
+## Risk Score Summary
 
 
-### Key Risk Factors and Their Impact on Stroke Risk
+The **Stroke Risk Score** is a composite feature designed to quantify a person’s likelihood of experiencing a stroke. It combines multiple individual risk factors into a single numerical value to support early detection, risk stratification, and targeted intervention.
 
-The table below shows the main risk factors identified, the high-risk category for each, corresponding stroke rates for individuals in the high-risk group versus others, the calculated risk increase, and the relative weight assigned to each factor in the risk score calculation.
+
+
+## How the Risk Score Is Built
+
+1. **Identify Key Risk Factors**  
+   We use features like hypertension, heart disease, marital status, gender, work type, smoking status, and residence type.
+
+2. **Determine High-Risk Groups**  
+   For each feature, we find the category (e.g., "Yes", "Male", "Self-employed") with the **highest stroke rate**. This becomes the "high-risk" category.
+
+3. **Calculate Risk Increase**  
+   We measure how much higher the stroke rate is for the high-risk group compared to others.
+
+4. **Assign Weights**  
+   Each feature is given a **weight** based on its risk increase, normalized so that the highest-impact factor gets a weight of `1.0`.
+
+5. **Compute Individual Scores**  
+   Each person gets a score by summing the weights of the risk factors they belong to.  
+   > Example: If a person has heart disease and hypertension, their risk score is the sum of both weights.
+
+---
+
+## Risk Factors and Assigned Weights
 
 | Risk Factor      | High-Risk Category Value | Stroke Rate (High Risk) | Stroke Rate (Others) | Risk Increase (Difference) | Relative Weight |
 |------------------|--------------------------|------------------------|---------------------|----------------------------|-----------------|
@@ -367,30 +387,12 @@ The table below shows the main risk factors identified, the high-risk category f
 | **Residence Type**| Urban                    | 5.20%                  | 4.53%               | 0.67%                      | 0.05            |
 
 
+### Explanation of Terms
 
-### Explanation of Terms:
-
-- **Stroke Rate (High Risk):** The proportion of individuals in the dataset with the specified high-risk factor who experienced a stroke.
-- **Stroke Rate (Others):** The stroke rate among individuals without the high-risk factor.
-- **Risk Increase:** The absolute increase in stroke rate attributed to the presence of the high-risk factor (difference between high risk and others).
-- **Relative Weight:** A normalized value representing the importance of each risk factor when calculating the overall risk score. The highest risk factor (heart disease) is assigned a weight of 1, and others are scaled accordingly.
-
-
-### How the Risk Score is Calculated:
-
-1. **Identification of Risk Factors:** For each individual, presence or absence of the high-risk category for each factor is determined (e.g., hypertension = 1 means “has hypertension”).
-2. **Assigning Weights:** Each risk factor is assigned a weight proportional to its contribution to stroke risk based on the risk increase observed in the dataset.
-3. **Summation of Scores:** The individual's overall risk score is calculated by summing the weights of all risk factors present.
-4. **Risk Stratification:** Higher risk scores correspond to higher likelihood of stroke, enabling categorization into risk groups (e.g., low, moderate, high).
-
-
-### Purpose and Benefits of the Risk Score
-
-- **Simplifies Risk Assessment:** By consolidating multiple risk factors into a single numerical score, clinicians can quickly assess patient risk.
-- **Supports Early Intervention:** High-risk individuals can be identified for more frequent monitoring or preventive measures.
-- **Data-Driven:** The weights and risk increases are derived directly from empirical stroke data, ensuring relevance and accuracy.
-- **Facilitates Patient Communication:** The score can be used to explain stroke risk to patients in a straightforward manner.
-
+- **Stroke Rate (High-Risk):** % of people with the risk factor who had a stroke.
+- **Stroke Rate (Others):** % of people without the risk factor who had a stroke.
+- **Risk Increase:** Difference between high-risk and others.
+- **Weight:** Relative importance of each factor (scaled so that the highest = 1.00).
 
 
 ## Clustering for Risk Segmentation
