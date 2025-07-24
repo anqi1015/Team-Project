@@ -711,7 +711,7 @@ To interpret the model’s decisions, we used **SHAP (SHapley Additive exPlanati
 
 ## 10. Deployment
 
-**Stroke Prediction Streamlit App**
+## Stroke Prediction Streamlit App
 
 This project includes a user-friendly Streamlit web application for predicting stroke risk based on user health inputs.
 
