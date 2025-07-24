@@ -1,6 +1,5 @@
 # Stroke Prediction with Machine Learning
 
----
 
 ## Table of Contents
 
@@ -27,7 +26,7 @@ Stroke remains one of the foremost causes of death and long-term disability worl
 
 This project explores the application of ML techniques to predict stroke occurrence using clinical and demographic data from the Kaggle Stroke Prediction Dataset. The goal is to build an accurate, interpretable, and deployable model that can aid healthcare providers and patients alike in stroke risk assessment.
 
----
+
 
 ### Dataset Description
 
@@ -50,7 +49,6 @@ The features are summarized below:
 | **smoking_status**| Smoking status: formerly smoked, never smoked, smokes, unknown |
 | **stroke**        | Target variable: 1 if stroke occurred, 0 otherwise            |
 
----
 
 ### Initial Observations and Challenges
 
@@ -76,7 +74,7 @@ The dataset presents several important characteristics and challenges that shape
 
 - With just over 5,000 samples, the dataset is sufficient to train classical machine learning models and small neural networks but not large-scale deep learning models.
 
----
+
 
 ### Project Objectives
 
@@ -100,7 +98,6 @@ Data preprocessing is a critical step in any machine learning project. The quali
 
 The raw stroke prediction dataset contained several imperfections, including missing BMI values, inconsistent categorical entries, and extreme outliers. This section describes the methods applied to clean and transform the data into a machine-learning-friendly format.
 
----
 
 ### Handling Missing Values
 
@@ -124,7 +121,6 @@ This method involved:
 - Predicting BMI for records with missing values using this model.
 - Validating imputation quality by comparing imputed values with observed distributions.
 
----
 
 #### BMI Computation and Imputation Strategy
 
@@ -199,11 +195,10 @@ Certain extreme values in `bmi` and `avg_glucose_level` were identified as outli
 - The `gender` column contained a small number of records labeled as `"Other"`. Due to their scarcity and unclear definition, these records were removed.
 - The `work_type` category `Children` applies to individuals under 18 years old. For modeling consistency, all `Children` entries were grouped under the category `Never_worked`. This consolidation simplifies the work type variable and aligns with logical age restrictions.
 - The `id` column was dropped as it does not contribute to prediction.
+
 ---
 
 ## 3 Exploratory Data Analysis
-
-
 
 Exploratory Data Analysis (EDA) is a fundamental step to understand the characteristics of the dataset and to identify relationships between variables that will inform feature engineering and model development.
 
@@ -388,7 +383,6 @@ The table below shows the main risk factors identified, the high-risk category f
 - **Data-Driven:** The weights and risk increases are derived directly from empirical stroke data, ensuring relevance and accuracy.
 - **Facilitates Patient Communication:** The score can be used to explain stroke risk to patients in a straightforward manner.
 
----
 
 
 ## Clustering for Risk Segmentation
@@ -427,13 +421,14 @@ To improve stroke prediction and better understand risk profiles, we applied **K
 
 Clustering effectively identified meaningful subgroups within the population. Incorporating these risk segments enhances predictive modeling by providing additional context beyond individual features, improving both model interpretability and performance in stroke prediction.
 
----
 
 ### Visualizing Clusters with UMAP
 
 Below is a UMAP projection visualizing the clusters in 2D space, showing clear separation among risk groups:
 
 ![UMAP Projection of Stroke Risk Clusters](Images/clustering.png)
+
+---
 
 ## 5. Model Selection and Development
 
@@ -475,6 +470,8 @@ This ensemble employs **soft voting**, averaging predicted probabilities from ea
 
 
 This comprehensive exploration and modular pipeline design allow for systematic experimentation and robust stroke risk modeling.
+
+---
 
 ## 6. Handling Class Imbalance
 
@@ -531,7 +528,6 @@ Models were evaluated using key classification metrics:
 
 Because stroke is rare in the dataset, most models scored well on overall accuracy but struggled to detect stroke cases accurately. This highlights the importance of focusing on performance for the minority "Stroke" class.
 
----
 
 ## Stroke Detection Performance
 
@@ -606,7 +602,6 @@ Multiple classifiers were trained and evaluated on the stroke prediction task us
 - Lower precision, meaning some false positives
 - AUC of 0.8161 shows strong separation ability between classes
 
----
 
 ## Top Feature Combinations (Neural Network F1 Score)
 
@@ -632,7 +627,6 @@ From 100 randomized trials of feature subset combinations, the following produce
 - Custom features like **risk_score** and **segment** boosted model performance.
 - Best F1 scores range from **0.35 to 0.41**, while AUC values remain high (~0.83–0.85).
 
----
 
 ## Summary and Recommendations
 
@@ -641,7 +635,8 @@ From 100 randomized trials of feature subset combinations, the following produce
 - Key predictors include age, hypertension, glucose level, BMI, and smoking status.
 - Future improvements could include ensemble learning, cost-sensitive models, and more robust sampling techniques.
 
-  
+---
+
 ## 8. Final Model 
 
 We selected this SGDClassifier model because it strikes an effective balance between correctly identifying stroke cases and maintaining overall predictive performance, which is critical in medical diagnosis.
@@ -679,6 +674,8 @@ We selected this SGDClassifier model because it strikes an effective balance bet
 
 This model was chosen for its strong discrimination power and critical ability to detect the minority class (stroke) effectively, aligning with the goal of early stroke detection and timely intervention.
 
+---
+
 ## 9. Interpretability and Explainability
 
 While model accuracy and metrics are important, explainability is critical in healthcare applications such as stroke prediction.
@@ -700,14 +697,13 @@ To interpret the model’s decisions, we used **SHAP (SHapley Additive exPlanati
 - Other influential features included `work_type' and 'segment'
 - This aligns with medical understanding that age is a strong risk factor for stroke.
 
+---
 
 ## 10. Deployment
 
 **Stroke Prediction Streamlit App**
 
 This project includes a user-friendly Streamlit web application for predicting stroke risk based on user health inputs.
-
----
 
 ## Features
 
@@ -717,7 +713,7 @@ This project includes a user-friendly Streamlit web application for predicting s
 - Marital Status, Work Type, Residence Type  
 - Average Glucose Level, BMI, Smoking Status  
 
----
+
 
 ### Data Preprocessing & Modeling
 
@@ -731,7 +727,6 @@ This project includes a user-friendly Streamlit web application for predicting s
   - Trained on preprocessed features + risk score + cluster segment
   - **Threshold tuning** for optimal F1-score
 
----
 
 ### Prediction Output
 
@@ -744,6 +739,8 @@ This project includes a user-friendly Streamlit web application for predicting s
   - **Stroke Information Chatbot:** Answers questions about stroke symptoms, risk factors, and emergency response (FAST).  
   - **Stroke Quiz:** A short quiz to increase user awareness of stroke facts.  
   - **Habit Tracker:** Tracks healthy habits with a gamified points system and progress bar.
+ 
+---
     
 ## 11. Challenges and lessons learned
 
