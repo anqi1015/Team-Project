@@ -415,15 +415,15 @@ To improve stroke prediction and better understand risk profiles, we applied **K
 - **Features Used:** Age, average glucose level, BMI, hypertension, and heart disease status.
 - **Preprocessing:** Missing BMI values were imputed using polynomial regression, and numeric features were standardized.
 - **Cluster Selection:** Tested cluster counts (k) from 2 to 10 using Silhouette scores.
-- **Optimal Number of Clusters:** 3 (silhouette score = 0.2254).
+- **Optimal Number of Clusters:** 3 (silhouette score = 0.2458).
 
 ### Cluster Summary
 
-| Cluster | Stroke Rate | Avg Risk Score | Age (years) | Avg Glucose | BMI   | Hypertension Rate | Heart Disease Rate | Risk Label      |
-|---------|-------------|----------------|-------------|-------------|-------|-------------------|--------------------|-----------------|
-| 0       | 5.09%       | 0.635          | 52.73       | 89.82       | 30.51 | 10.07%            | 4.92%              | Elevated Risk   |
-| 1       | 14.45%      | 0.966          | 62.47       | 203.13      | 33.81 | 30.09%            | 19.47%             | High Risk       |
-| 2       | 0.20%       | 0.066          | 16.50       | 94.12       | 23.74 | 0.07%             | 0.07%              | Low Risk        |
+| Cluster | Stroke Rate | Avg Risk Score | Age (years) | Avg Glucose Level | BMI    | Hypertension Rate | Heart Disease Rate | Risk Label     |
+|---------|-------------|----------------|-------------|-------------------|--------|-------------------|--------------------|----------------|
+| 0       | 0.13%       | 0.10           | 16.93       | 94.09             | 23.00  | 0.00%             | 0.06%              | Low Risk       |
+| 1       | 14.29%      | 0.92           | 61.81       | 205.67            | 33.69  | 27.83%            | 17.56%             | High Risk      |
+| 2       | 5.29%       | 0.64           | 53.47       | 89.40             | 31.11  | 10.90%            | 5.50%              | Elevated Risk  |
 
 ### Interpretation
 
@@ -445,33 +445,46 @@ Below is a UMAP projection visualizing the clusters in 2D space, showing clear s
 
 ## 5. Model Selection and Development
 
-In this step, we explored a wide range of classification algorithms to identify the best model for predicting stroke. We implemented and tested 32 different classifiers spanning various families:
 
-- **Ensemble methods:** RandomForestClassifier, GradientBoostingClassifier, AdaBoostClassifier, BaggingClassifier, ExtraTreesClassifier, HistGradientBoostingClassifier  
-- **Linear models:** LogisticRegression, RidgeClassifier, SGDClassifier, PassiveAggressiveClassifier, Perceptron  
+To identify the best predictive model for stroke detection, we evaluated 32 classifiers across diverse algorithm families, including:
+
+- **Ensemble methods:** RandomForest, GradientBoosting, AdaBoost, Bagging, ExtraTrees, HistGradientBoosting  
+- **Linear models:** LogisticRegression, RidgeClassifier, SGDClassifier, PassiveAggressive, Perceptron  
 - **Naive Bayes variants:** GaussianNB, BernoulliNB, ComplementNB, MultinomialNB, CategoricalNB  
-- **Nearest neighbor methods:** KNeighborsClassifier, RadiusNeighborsClassifier, NearestCentroid  
+- **Nearest neighbor methods:** KNeighbors, RadiusNeighbors, NearestCentroid  
 - **Support Vector Machines:** SVC, LinearSVC, NuSVC  
-- **Tree-based models:** DecisionTreeClassifier, ExtraTreeClassifier  
+- **Tree-based models:** DecisionTree, ExtraTree  
 - **Discriminant analysis:** LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis  
 - **Semi-supervised learning:** LabelPropagation, LabelSpreading  
-- **Other:** CalibratedClassifierCV, DummyClassifier, OneVsRestClassifier with LogisticRegression and SVC
+- **Others:** CalibratedClassifierCV, DummyClassifier, OneVsRest with LogisticRegression and SVC
 
-Each classifier was integrated into a pipeline with preprocessing steps to standardize numeric features and encode categorical variables. This modular pipeline structure ensures consistent data transformation and easy experimentation.
+Each classifier was wrapped in a preprocessing pipeline to standardize numeric features (using mean imputation and scaling) and encode categorical variables (most frequent imputation plus one-hot encoding), ensuring consistent, leak-proof training.
 
-The dataset was split into training and testing sets using stratified sampling to maintain class proportions. Models were trained on the training set with default hyperparameters to establish baseline performance.
+The dataset was stratified into training and testing subsets to preserve class distribution. Models were trained with default hyperparameters to establish baseline results.
 
-We implemented an ensemble model combining four strong classifiers:  
-  - Logistic Regression (with balanced class weights)  
-  - Random Forest (200 trees, balanced class weights)  
-  - Gradient Boosting (200 estimators)  
-  - AdaBoost (200 estimators)  
-- The ensemble uses **soft voting**, which averages predicted probabilities from each classifier to make the final prediction. This approach leverages the strengths of each model to improve overall performance and robustness.
-- Using a **pipeline** ensures consistent preprocessing (imputation, scaling, encoding) and modeling steps are combined seamlessly, preventing data leakage and simplifying reproducibility.
-- We applied **SimpleImputer** with mean strategy for numeric features to handle any missing values, which helps maintain data integrity and prevents errors during training.
-- Categorical features are imputed with the most frequent value and one-hot encoded to convert them into a machine-learning friendly numeric format.
-- The pipeline allows for straightforward training and evaluation, promoting modularity and easy tuning.
+An ensemble model was built combining four strong classifiers with balanced class weights:  
+- Logistic Regression  
+- Random Forest (200 trees)  
+- Gradient Boosting (200 estimators)  
+- AdaBoost (200 estimators)  
 
+This ensemble employs **soft voting**, averaging predicted probabilities from each model for robust final predictions.
+
+---
+
+## Neural Network Model Results
+
+### Architecture and Training
+
+- Built a deep neural network with multiple dense layers using ReLU activation, batch normalization, and dropout for regularization.
+- The output layer uses sigmoid activation for binary stroke classification.
+- Class weights were applied to address data imbalance during training.
+- Optimized with binary cross-entropy loss and Adam optimizer.
+- Early stopping and learning rate reduction on plateau were used to prevent overfitting and improve convergence.
+
+---
+
+This comprehensive exploration and modular pipeline design allow for systematic experimentation and robust stroke risk modeling.
 
 ## 6. Handling Class Imbalance
 
@@ -519,170 +532,129 @@ We implemented an ensemble model combining four strong classifiers:
 
 ## 7. Model Evaluation
 
-Models were evaluated on the held-out test set using classification reports including:
 
-- **Precision:** Ability to avoid false positives  
-- **Recall:** Ability to detect true positives (important for stroke detection)  
-- **F1-score:** Harmonic mean of precision and recall balancing both metrics  
-- **Support:** Number of actual samples per class
+## Evaluation Approach
 
-The results showed that while most classifiers achieved very high accuracy on the majority (no stroke) class, their recall and precision for the minority stroke class remained low, reflecting the difficulty of predicting rare events.
+Models were evaluated using key classification metrics:
 
-Some classifiers like RandomForest and GradientBoosting showed relatively better balance but still limited stroke detection performance. Several models failed to train due to incompatibilities with the data (e.g., Naive Bayes variants expecting non-negative inputs).
+- **Precision** – how well the model avoids false alarms
+- **Recall** – how well the model identifies true stroke cases (especially important)
+- **F1 Score** – a balance of precision and recall
+- **Support** – how many actual cases were in each class
 
-Errors like the "No neighbors found" for RadiusNeighborsClassifier highlighted the challenges in applying certain algorithms to this dataset.
-
-Multiple classifiers were trained and evaluated on the stroke prediction task. Due to the highly imbalanced dataset (majority "No Stroke" cases), accuracy alone is not a reliable metric. Below is a summary of key evaluation metrics focusing on the minority class ("Stroke") detection performance:
-
-### General Results
-- Most classifiers achieved high overall accuracy (70% to 95%), primarily driven by correct classification of the majority class ("No Stroke").
-- However, stroke cases are underrepresented, making recall and precision on this class crucial.
-
-### Minority Class ("Stroke") Performance
-- **Recall** (sensitivity) for stroke detection ranged widely from about 8% to 82%.
-- Linear models such as Logistic Regression, RidgeClassifier, and SGDClassifier achieved the highest recall (~80%) for stroke, indicating better ability to identify true stroke cases, though often at the cost of low precision.
-- Tree-based models (Random Forest, Gradient Boosting, AdaBoost) showed mixed recall (14%–72%) but generally lower precision (<25%), implying many false positives when detecting stroke.
-- Some models like GaussianNB and DummyClassifier performed poorly, either missing most stroke cases or always predicting the majority class.
-
-### Precision-Recall Tradeoff
-- High precision (>95%) was consistently achieved on "No Stroke" class.
-- Precision for stroke class remained low (<25%) across most models, reflecting difficulty distinguishing true stroke cases from false positives.
-- F1-scores for stroke were generally below 0.25, indicating poor balance between precision and recall.
-
-### Averages
-- Weighted averages of precision, recall, and F1-score were high (~0.80–0.93), dominated by the majority class performance.
-- Macro averages, which give equal weight to both classes, were low (~0.5–0.6), highlighting poor performance on the minority class.
-
-### Classifier Failures
-- Some classifiers (ComplementNB, MultinomialNB, CategoricalNB, RadiusNeighbors) failed to train due to incompatible data properties or hyperparameter issues.
-
-### Key Takeaways
-- The models reliably classify the majority "No Stroke" class but struggle to detect stroke cases effectively.
-- Improving minority class recall and precision remains the critical challenge.
-- Further steps should focus on advanced class imbalance techniques, threshold tuning, and potentially ensemble or specialized models tailored for stroke prediction.
-
-
-
-## Final Model Training and Evaluation with Selected Features
-
-
-### Model Architecture
-
-- Built a neural network using TensorFlow Keras with the following structure:
-  - Dense layers with ReLU activation and batch normalization.
-  - Dropout layers for regularization to prevent overfitting.
-  - Output layer with sigmoid activation for binary classification.
-- Optimized with Adam optimizer and binary cross-entropy loss.
-
-### Handling Class Imbalance
-
-- Calculated class weights to address imbalance between stroke and non-stroke classes.
-- Applied class weights during model training for balanced learning.
-
-### Training Details
-
-- Early stopping monitored validation loss to avoid overfitting.
-- Learning rate reduced on plateau to improve convergence.
-- Maximum 50 epochs with 20% validation split.
-
-### Evaluation Metrics
-
-- Used the precision-recall curve to identify the optimal classification threshold maximizing the F1 score.
-- Reported final F1 score, ROC AUC, and classification report on the test set.
-
-## Top 10 Feature Subsets by F1 Score
-
-After running 100 randomized trials of feature subset combinations with our neural network model, the top 10 performing feature subsets ranked by F1 score on the test set were:
-
-| Rank | Features                                                                                         | F1 Score | ROC AUC |
-|-------|------------------------------------------------------------------------------------------------|----------|---------|
-| 1     | (age, hypertension, ever_married, work_type, Residence_type, avg_glucose_level, bmi, smoking_status) | 0.4091   | 0.8444  |
-| 2     | (gender, age, hypertension, heart_disease, ever_married, work_type, avg_glucose_level, bmi, smoking_status, segment) | 0.3977 | 0.8522  |
-| 3     | (gender, age, heart_disease, work_type, Residence_type, bmi, segment)                            | 0.3735   | 0.8479  |
-| 4     | (gender, age, hypertension, work_type, avg_glucose_level, bmi, smoking_status, segment)          | 0.3681   | 0.8434  |
-| 5     | (age, hypertension, ever_married, work_type, Residence_type, avg_glucose_level, bmi, risk_score) | 0.3646   | 0.8327  |
-| 6     | (age, hypertension, heart_disease, Residence_type, avg_glucose_level, bmi, smoking_status, risk_score) | 0.3646 | 0.8362  |
-| 7     | (age, hypertension, ever_married, bmi, smoking_status, segment)                                  | 0.3626   | 0.8403  |
-| 8     | (gender, age, hypertension, work_type, bmi, segment)                                            | 0.3613   | 0.8458  |
-| 9     | (gender, age, heart_disease, ever_married, work_type, Residence_type, avg_glucose_level, bmi, risk_score, segment) | 0.3611 | 0.8313  |
-| 10    | (gender, age, bmi, smoking_status, risk_score, segment)                                         | 0.3586   | 0.8334  |
+Because stroke is rare in the dataset, most models scored well on overall accuracy but struggled to detect stroke cases accurately. This highlights the importance of focusing on performance for the minority "Stroke" class.
 
 ---
 
-**Interpretation:**
+## Stroke Detection Performance
 
-- **Age** appears in every top-performing combination, confirming its dominant role in stroke prediction.
-- Other frequent features include **avg_glucose_level**, **risk_score**, **bmi**, and **hypertension**—all key clinical or lifestyle indicators.
-- The best F1 scores range from **0.3537 to 0.3815**, while ROC AUCs range from **0.8300 to 0.8512**.
-- These subsets achieve significantly higher recall for stroke cases compared to earlier models, at the cost of lower precision—helpful in high-sensitivity screening scenarios.
-- Feature engineering elements like **risk_score** and **segment** appear in most top models, indicating added value from derived features.
-- This analysis helps guide future work on model refinement, especially for minority class (stroke) detection.
-
-
-
-### Feature Subset Selection
-
-To identify the most informative features, we performed a randomized grid search over subsets of 1 to 12 features, evaluating each subset using a neural network classifier with stratified train/test splits. The goal was to maximize the F1 score due to class imbalance.
-
-The top-performing feature subset was:
-
-- **age**: Known strong risk factor for stroke
-- **hypertension**: High blood pressure, a leading stroke risk factor
-- **Residence_type**: Urban or rural residence, which can affect access to healthcare and risk exposure
-- **bmi**: Body mass index, indicative of obesity-related risks
-- **segment**: Patient grouping from prior segmentation analysis
-
----
-
-
-## Evaluation Results
 
 ### Overview
 
-Based on previous feature subset selection, we trained a deep neural network model using the top-performing features:  
-(``age``, `hypertension`, `ever_married`, `work_type`, `Residence_type`, `avg_glucose_level`, `bmi`, `smoking_status`)  
-to predict stroke occurrence.
+Multiple classifiers were trained and evaluated on the stroke prediction task using a highly imbalanced dataset (majority "No Stroke" cases). Due to this imbalance, overall accuracy was not sufficient to measure performance. Instead, focus was placed on precision, recall, and F1-score for the minority "Stroke" class.
 
+### General Results
 
-The model was evaluated on a held-out test set (20% of data, stratified).
+| Metric                         | Range         |
+|--------------------------------|---------------|
+| Overall Accuracy               | 70% – 95%     |
+| Stroke Recall (Sensitivity)    | 8% – 82%      |
+| Stroke Precision               | < 25%         |
+| Stroke F1 Score                | < 0.25        |
+| Weighted Average F1            | ~0.80 – 0.93  |
+| Macro Average F1               | ~0.50 – 0.60  |
 
-## Model Evaluation Metrics
+- High accuracy was mainly due to correct classification of the majority "No Stroke" cases.
+- Stroke recall and precision varied widely but were generally low, indicating challenges in detecting true stroke cases while avoiding false positives.
+- Some classifiers failed to train due to data incompatibilities.
 
-| Metric                | Value  |
-|-----------------------|--------|
-| Best F1 Threshold     | 0.753  |
-| F1 Score              | 0.3429 |
-| Area Under Curve (AUC)| 0.8161 |
-| Accuracy              | 0.89   |
+### Stroke Class Performance by Classifier
 
----
+| Model                | Precision | Recall | F1 Score | Notes                              |
+|----------------------|-----------|--------|----------|----------------------------------|
+| AdaBoost             | 0.12      | 0.82   | 0.21     | Very high recall, very low precision |
+| SGDClassifier        | 0.18      | 0.76   | 0.28     | Best balance among linear models |
+| LogisticRegression   | 0.14      | 0.80   | 0.24     | High recall, moderate precision  |
+| RandomForest         | 0.15      | 0.20   | 0.17     | Low recall despite decent precision |
+| GradientBoosting     | 0.17      | 0.60   | 0.27     | Balanced recall and precision    |
+| PassiveAggressive    | 0.16      | 0.46   | 0.24     | Moderate recall, low precision   |
+| GaussianNB           | 0.08      | 0.94   | 0.16     | Very high recall, very low precision |
+| KNeighbors           | 0.11      | 0.38   | 0.17     | Low recall and precision         |
+| DummyClassifier      | 0.00      | 0.00   | 0.00     | No stroke detection              |
 
-### Detailed Classification Report
+### Key Takeaways
 
-| Class      | Precision | Recall | F1-Score | Support |
+- Models generally classify the majority "No Stroke" class well but struggle with accurate stroke detection.
+- Linear models achieve higher recall but at the cost of many false positives (low precision).
+- Tree-based and ensemble models have mixed results with moderate recall but low precision.
+- Improving stroke precision and recall remains a critical challenge.
+- Future work should focus on advanced imbalance handling, threshold tuning, and specialized modeling techniques for better minority class detection.
+
+## Neural Network Model Results
+
+### Architecture and Training
+
+- Neural network with dense layers, ReLU activation, dropout, and sigmoid output
+- Used class weighting to handle imbalanced data
+- Optimized using binary cross-entropy and Adam
+- Early stopping and learning rate scheduling applied
+
+### Evaluation Metrics
+
+| Metric                    | Value   |
+|---------------------------|---------|
+| Best F1 Threshold         | 0.753   |
+| F1 Score (Stroke class)   | 0.3429  |
+| ROC AUC                   | 0.8161  |
+| Accuracy                  | 0.89    |
+
+### Classification Report
+
+| Class      | Precision | Recall | F1 Score | Support |
 |------------|-----------|--------|----------|---------|
 | No Stroke  | 0.98      | 0.91   | 0.94     | 972     |
 | Stroke     | 0.25      | 0.58   | 0.35     | 50      |
 
-- The model demonstrates strong performance for predicting non-stroke cases, with high precision and recall.
-- Stroke prediction remains challenging due to significant class imbalance:
-  - Precision is modest at 0.25, indicating some false positives.
-  - Recall has improved to 0.58, suggesting the model is identifying more true stroke cases.
-- The overall AUC of 0.8161 reflects good discrimination between stroke and non-stroke cases.
-- Using a tuned threshold of 0.753 helps balance precision and recall for the minority class.
+- Improved recall over baseline models, capturing more true stroke cases
+- Lower precision, meaning some false positives
+- AUC of 0.8161 shows strong separation ability between classes
 
 ---
 
-## Interpretation and Insights
+## Top Feature Combinations (Neural Network F1 Score)
 
-- **Feature importance** aligns with clinical knowledge, confirming age and hypertension as key stroke predictors.
-- The moderate F1 score on stroke cases highlights the difficulty of this prediction task in imbalanced datasets.
-- Incorporating categorical variables such as Residence_type and segment improves contextual risk profiling.
-- Neural networks can model complex feature interactions but may require larger datasets or additional balancing methods for rare outcomes.
+From 100 randomized trials of feature subset combinations, the following produced the highest F1 scores:
 
+| Rank | Features                                                                                             | F1 Score | ROC AUC |
+|------|------------------------------------------------------------------------------------------------------|----------|---------|
+| 1    | age, hypertension, ever_married, work_type, Residence_type, avg_glucose_level, bmi, smoking_status   | 0.4091   | 0.8444  |
+| 2    | gender, age, hypertension, heart_disease, ever_married, work_type, avg_glucose_level, bmi, smoking_status, segment | 0.3977 | 0.8522  |
+| 3    | gender, age, heart_disease, work_type, Residence_type, bmi, segment                                  | 0.3735   | 0.8479  |
+| 4    | gender, age, hypertension, work_type, avg_glucose_level, bmi, smoking_status, segment                | 0.3681   | 0.8434  |
+| 5    | age, hypertension, ever_married, work_type, Residence_type, avg_glucose_level, bmi, risk_score       | 0.3646   | 0.8327  |
+| 6    | age, hypertension, heart_disease, Residence_type, avg_glucose_level, bmi, smoking_status, risk_score | 0.3646   | 0.8362  |
+| 7    | age, hypertension, ever_married, bmi, smoking_status, segment                                        | 0.3626   | 0.8403  |
+| 8    | gender, age, hypertension, work_type, bmi, segment                                                   | 0.3613   | 0.8458  |
+| 9    | gender, age, heart_disease, ever_married, work_type, Residence_type, avg_glucose_level, bmi, risk_score, segment | 0.3611 | 0.8313  |
+| 10   | gender, age, bmi, smoking_status, risk_score, segment                                                | 0.3586   | 0.8334  |
 
+### Interpretation
 
+- **Age** appears in every top combination — the strongest predictor.
+- **Glucose level**, **BMI**, **hypertension**, and **risk_score** are consistently impactful.
+- Custom features like **risk_score** and **segment** boosted model performance.
+- Best F1 scores range from **0.35 to 0.41**, while AUC values remain high (~0.83–0.85).
 
+---
+
+## Summary and Recommendations
+
+- Most models perform well on "No Stroke" detection but struggle with minority class prediction.
+- Neural networks with engineered features and threshold tuning provided the best stroke recall.
+- Key predictors include age, hypertension, glucose level, BMI, and smoking status.
+- Future improvements could include ensemble learning, cost-sensitive models, and more robust sampling techniques.
+
+  
 ## 8. Final Model 
 
 We selected this SGDClassifier model because it strikes an effective balance between correctly identifying stroke cases and maintaining overall predictive performance, which is critical in medical diagnosis.
@@ -738,7 +710,7 @@ To interpret the model’s decisions, we used **SHAP (SHapley Additive exPlanati
 ![SHAP Summary Plot](Images/shap.png)
 
 - **Age** was found to be the **most important feature** driving stroke predictions.
-- Other influential features included `avg_glucose_level`, `bmi`, and `hypertension`.
+- Other influential features included `work_type' and 'segment'
 - This aligns with medical understanding that age is a strong risk factor for stroke.
 
 
@@ -748,19 +720,38 @@ To interpret the model’s decisions, we used **SHAP (SHapley Additive exPlanati
 
 This project includes a user-friendly Streamlit web application for predicting stroke risk based on user health inputs.
 
-### Features
+---
 
-- **User Input Form**  
-  Collects health details including age, gender, hypertension, heart disease, marital status, work type, residence type, average glucose level, BMI, and smoking status.
+## Features
 
-- **Data Preprocessing & Model Training**  
-  - Median imputation for missing numeric values  
-  - One-hot encoding for categorical variables  
-  - SMOTE oversampling to address class imbalance  
-  - Logistic Regression classifier trained on balanced data
+### User Health Input
+Interactive form collects key health features:
+- Age, Gender, Hypertension, Heart Disease  
+- Marital Status, Work Type, Residence Type  
+- Average Glucose Level, BMI, Smoking Status  
 
-- **Prediction & Feedback**  
-  Provides stroke risk probability with clear, styled output. High risk prompts an alert advising medical consultation.
+---
+
+### Data Preprocessing & Modeling
+
+- **BMI Imputation**: Missing BMI values are imputed using **polynomial regression** based on age and glucose level.
+- **Categorical Encoding**: One-hot encoding for features like work type and smoking status.
+- **Risk Scoring**: Automatically assigns a **risk score** based on high-risk categories in categorical variables.
+- **Segmentation**: Clustering (KMeans + silhouette analysis) segments users into:
+  - Low Risk, Moderate Risk, Elevated Risk, High Risk
+- **Final Classifier**:  
+  - **SGDClassifier** (`modified_huber` loss, balanced class weights)
+  - Trained on preprocessed features + risk score + cluster segment
+  - **Threshold tuning** for optimal F1-score
+
+---
+
+### Prediction Output
+
+- Outputs **stroke risk probability** and **label** (High/Low risk)
+- Color-coded display (green for low, red for high)
+- High risk triggers an **alert to consult a healthcare professional**
+
 
 - **Interactive Sections**  
   - **Stroke Information Chatbot:** Answers questions about stroke symptoms, risk factors, and emergency response (FAST).  
